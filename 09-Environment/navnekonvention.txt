@@ -1,0 +1,5 @@
+[Artifact][#] - [Format] - [Filename]
+
+Eksempel:
+
+UC1 - Fully dressed - Opret låneanmodning
