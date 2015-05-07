@@ -1,19 +1,9 @@
 package dataLayer;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-public class Connect {
-	private static final String CONNECTION_URL = "jdbc:sqlite:ffsdatabase.db";
-	private Connection connection = null;
+public interface Connect {
 	
-	public Connect() throws SQLException {
-		connection = DriverManager.getConnection(CONNECTION_URL);
-		connection.setAutoCommit(false);
-	}
+	public Connection getConnection();
 	
-	public Connection getConnection() {
-		return connection;
-	}
 }
