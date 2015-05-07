@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Connect {
-	private static final String CONNECTION_URL = "jdbc:sqlite:C:/FFS/test.db";
+	private static final String CONNECTION_URL = "jdbc:sqlite:ffsdatabase.db";
 	private Connection connection = null;
 	
 	public Connect() throws SQLException {
