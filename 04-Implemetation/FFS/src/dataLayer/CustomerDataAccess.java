@@ -7,14 +7,23 @@ import java.sql.SQLException;
 import domainLayer.Customer;
 
 public class CustomerDataAccess {
-  private static final String SELECT = "SELECT * FROM customer";
+  
+  private static final String SELECT = "SELECT * FROM Customer";
 
-  public Customer readCustomers(Connection connection, int aid) throws SQLException {
+  public Customer readCustomer() throws SQLException {
     
-    Connection connect = null;
+    Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultset = null;
     Customer customer = null;
+    
+    try {
+      connection = new Connect().getConnection();
+    } finally {
+      if (connection != null) {
+        connection.close();
+      }
+    }
     
     try {
       statement = connection.prepareStatement(SELECT);
@@ -34,9 +43,11 @@ public class CustomerDataAccess {
       if (resultset != null) {
         resultset.close();
       }
+      
       if (statement != null) {
         statement.close();
       }
     }
   }
+  
 }
