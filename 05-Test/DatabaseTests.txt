@@ -1,0 +1,42 @@
+Database Tests:
+    TestInsertAndReadCustomer:
+        input:
+            FirstName: Hans
+            LastName: Iversen
+            BadStanding: 1
+        output:
+            FirstName: Hans
+            LastName: Iversen
+            BadStanding: 1
+
+    TestInsertAndReadSalesman:
+        input:
+            LoanValueLimit: 10000
+        output:
+            LoanValueLimit: 10000
+
+    TestInsertAndReadCar:
+        input:
+            Model: F50
+            Price: 499.95
+        output:
+            Model: F50
+            Price: 499.95
+
+    TestInsertAndReadLoanOffer:
+        Input:
+            CustomerID: 1
+            SalesmanID: 1
+            CarID: 1
+            TotalIntrestRate: 10.4
+            DownPayment: 30.12
+            LoanSize: 300.1
+            PaymentPeriodInMonths: 2
+        output:
+            CustomerID: 1
+            SalesmanID: 1
+            CarID: 1
+            TotalIntrestRate: 10.4
+            DownPayment: 30.12
+            LoanSize: 300.1
+            PaymentPeriodInMonths: 2 
