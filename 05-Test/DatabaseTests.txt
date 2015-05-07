@@ -1,5 +1,5 @@
 Database Tests:
-    TestInsertAndReadCustomer:
+    testInsertAndReadCustomer:
         input:
             FirstName: Hans
             LastName: Iversen
@@ -9,13 +9,13 @@ Database Tests:
             LastName: Iversen
             BadStanding: 1
 
-    TestInsertAndReadSalesman:
+    testInsertAndReadSalesman:
         input:
             LoanValueLimit: 10000
         output:
             LoanValueLimit: 10000
 
-    TestInsertAndReadCar:
+    testInsertAndReadCar:
         input:
             Model: F50
             Price: 499.95
@@ -23,7 +23,7 @@ Database Tests:
             Model: F50
             Price: 499.95
 
-    TestInsertAndReadLoanOffer:
+    testInsertAndReadLoanOffer:
         Input:
             CustomerID: 1
             SalesmanID: 1
