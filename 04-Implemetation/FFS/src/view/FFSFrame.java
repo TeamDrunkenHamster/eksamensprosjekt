@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 @SuppressWarnings("serial")
@@ -14,7 +15,7 @@ public class FFSFrame extends JFrame implements Observer{
 	
 	public FFSFrame(){
 		setDefaultSettings();
-		
+
 	}
 
 
@@ -24,6 +25,8 @@ public class FFSFrame extends JFrame implements Observer{
 		Dimension d = new Dimension(800,600);
 		setMinimumSize(d);
 		setVisible(true);
+		JPanel createOfferPane = new JPanel();
+		tabPane.add("Create Offer", createOfferPane);
 		getContentPane().add(tabPane);
 	}
 	
