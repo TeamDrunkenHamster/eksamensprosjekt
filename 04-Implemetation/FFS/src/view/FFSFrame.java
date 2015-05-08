@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Observable;
-import java.util.Observer;
+
+
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,8 +18,10 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import logic.FFSObserver;
+
 @SuppressWarnings("serial")
-public class FFSFrame extends JFrame implements Observer{
+public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
 	
@@ -71,7 +73,7 @@ public class FFSFrame extends JFrame implements Observer{
 				
 		createOfferPane.add(westPanel,gc);
 		gc.gridx = 1;
-		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.fill = GridBagConstraints.BOTH;
 		createOfferPane.add(eastPanel,gc);
 		gc.gridx = 0;
 		
@@ -91,31 +93,29 @@ public class FFSFrame extends JFrame implements Observer{
 		westPanel.add(customerLastNameTextField,gc);
 		gc.gridx = 0;
 		gc.gridy += 1;
-		westPanel.add(customerStanding, gc);		
-		
+		westPanel.add(customerStanding, gc);
 		
 		//east blob style
 		JScrollPane spEast = new JScrollPane();
 		String[] header = {"First Name", "Last Name"};
-		String[][] data  = {{"Ja", "Tak"},
-							{"nej", "Tak"}};
+		String[][] data  = {};
 		
 		JTable tEast = new JTable(data, header);
 		spEast.setViewportView(tEast);
+		tEast.setFillsViewportHeight(true);
 		
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		eastPanel.setBackground(new Color(200,50,0));
-		eastPanel.add(new JLabel("show yourself!"),gc);
 		gc.gridy +=1;
 		eastPanel.add(spEast, gc);
 
 		tabPane.add("Create Offer", createOfferPane);
 		getContentPane().add(tabPane);
-	}
-	
+	}	
 	
 	@Override
-	public void update(Observable o, Object arg) {	
+	public void update() {
+		// TODO Auto-generated method stub		
 	}
 }
