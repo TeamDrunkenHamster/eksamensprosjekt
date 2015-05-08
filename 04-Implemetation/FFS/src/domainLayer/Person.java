@@ -18,4 +18,9 @@ public class Person {
     return offers;
   }
 
+  @Override
+  public String toString() {
+    return "Person [id=" + id + ", offers=" + offers + "]";
+  }
+
 }

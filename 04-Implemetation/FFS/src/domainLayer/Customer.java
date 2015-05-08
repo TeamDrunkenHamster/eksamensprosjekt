@@ -23,5 +23,10 @@ public class Customer extends Person {
   public void setBadStanding( int badStanding ) {
     this.badStanding = badStanding;
   }
+  @Override
+  public String toString() {
+    return "Customer [firstName=" + firstName + ", lastName=" + lastName + ", badStanding=" + badStanding + ", toString()=" + super.toString() + "]";
+  }
 
+  
 }
