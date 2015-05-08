@@ -5,8 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Observable;
-import java.util.Observer;
+
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 @SuppressWarnings("serial")
-public class FFSFrame extends JFrame implements Observer{
+public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
 	
@@ -91,8 +90,7 @@ public class FFSFrame extends JFrame implements Observer{
 		westPanel.add(customerLastNameTextField,gc);
 		gc.gridx = 0;
 		gc.gridy += 1;
-		westPanel.add(customerStanding, gc);		
-		
+		westPanel.add(customerStanding, gc);
 		
 		//east blob style
 		JScrollPane spEast = new JScrollPane();
@@ -111,8 +109,7 @@ public class FFSFrame extends JFrame implements Observer{
 
 		tabPane.add("Create Offer", createOfferPane);
 		getContentPane().add(tabPane);
-	}
-	
+	}	
 	
 	@Override
 	public void update(Observable o, Object arg) {	
