@@ -61,8 +61,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
 		for (FFSObserver observer : observers)
 			observer.update();
-		
-//		observers.forEach(observer -> observer.update());
 	}
 
 }

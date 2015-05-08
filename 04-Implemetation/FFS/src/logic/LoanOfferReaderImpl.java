@@ -1,6 +1,8 @@
 package logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
@@ -13,6 +15,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 
 	CustomerDAO customerDAO;
 	Connect connect;
+	List<FFSObserver> observers = new ArrayList<>();
 	
 	public LoanOfferReaderImpl() {
 		
@@ -39,6 +42,20 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 		} catch (SQLException e) {
 			return new Customer();
 		}
+	}
+
+	@Override
+	public void addObserver(FFSObserver observer) {
+
+		if (observer != null && !observers.contains(observer))
+            observers.add(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+
+		for (FFSObserver observer : observers)
+			observer.update();
 	}
 
 	
