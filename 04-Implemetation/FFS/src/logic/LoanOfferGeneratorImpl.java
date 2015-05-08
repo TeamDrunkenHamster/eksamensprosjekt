@@ -1,6 +1,8 @@
 package logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
@@ -15,6 +17,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	Customer customer;
 	CustomerDAO customerDAO;
 	Connect connect;
+	List<FFSObserver> observers = new ArrayList<>();
 	
 	public LoanOfferGeneratorImpl() {
 		
@@ -42,6 +45,24 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		notifyObservers();
+	}
+
+	@Override
+	public void addObserver(FFSObserver observer) {
+
+		if (observer != null && !observers.contains(observer))
+            observers.add(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+
+		for (FFSObserver observer : observers)
+			observer.update();
+		
+//		observers.forEach(observer -> observer.update());
 	}
 
 }
