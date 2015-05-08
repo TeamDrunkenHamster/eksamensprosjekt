@@ -71,7 +71,7 @@ public class FFSFrame extends JFrame implements Observer{
 				
 		createOfferPane.add(westPanel,gc);
 		gc.gridx = 1;
-		gc.fill = GridBagConstraints.HORIZONTAL;
+		gc.fill = GridBagConstraints.BOTH;
 		createOfferPane.add(eastPanel,gc);
 		gc.gridx = 0;
 		
@@ -97,16 +97,15 @@ public class FFSFrame extends JFrame implements Observer{
 		//east blob style
 		JScrollPane spEast = new JScrollPane();
 		String[] header = {"First Name", "Last Name"};
-		String[][] data  = {{"Ja", "Tak"},
-							{"nej", "Tak"}};
+		String[][] data  = {};
 		
 		JTable tEast = new JTable(data, header);
 		spEast.setViewportView(tEast);
+		tEast.setFillsViewportHeight(true);
 		
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		eastPanel.setBackground(new Color(200,50,0));
-		eastPanel.add(new JLabel("show yourself!"),gc);
 		gc.gridy +=1;
 		eastPanel.add(spEast, gc);
 
