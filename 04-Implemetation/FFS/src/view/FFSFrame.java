@@ -6,8 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,7 +45,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	}
 
 	private void setDefaultSettings() {
-		Dimension minSize = new Dimension(800,600);
+		Dimension minSize = new Dimension(1024, 768);
 		setMinimumSize(minSize);		
 		setTitle("Ferrari Financing System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,13 +64,15 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		JLabel customerLastName = new JLabel("Last name");
 		JLabel customerStanding = new JLabel("Current standing ");
 		
-		final int textFieldSize = 20;
-		JTextField customerCPRTextField = new JTextField(textFieldSize);
-		JTextField customerFirstNameTextField = new JTextField(textFieldSize);
-		JTextField customerLastNameTextField = new JTextField(textFieldSize);		
-				
+		final int textFieldLength = 20;
+		JTextField customerCPRTextField = new JTextField(textFieldLength);
+		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
+		JTextField customerLastNameTextField = new JTextField(textFieldLength);		
+
+		gc.weightx = 0;
 		createOfferPane.add(westPanel,gc);
 		gc.gridx = 1;
+		gc.weightx = 1;
 		gc.fill = GridBagConstraints.BOTH;
 		createOfferPane.add(eastPanel,gc);
 		gc.gridx = 0;
