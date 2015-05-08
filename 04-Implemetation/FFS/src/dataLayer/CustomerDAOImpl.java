@@ -13,15 +13,13 @@ public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hv
   private static final String CREATE = "INSERT INTO Customer (firstName, lastName, badStanding) VALUES (?, ?, ?)";
   private static final String DELETE_FROM_ID = "DELETE FROM Customer WHERE customerID = ?";
   
-  public Customer readCustomer(int customerID) throws SQLException {
+  public Customer readCustomer(Connection connection, int customerID) throws SQLException {
     
-    Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
     Customer customer = null;
       
     try {
-      connection = new ConnectImpl().getConnection();
       statement = connection.prepareStatement( SELECT_FROM_ID );
       statement.setInt(1, customerID);
       resultSet = statement.executeQuery();
@@ -42,13 +40,11 @@ public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hv
     return customer;
   }
   
-  public void createCustomer(Customer customer) throws SQLException {
+  public void createCustomer(Connection connection, Customer customer) throws SQLException {
     
-    Connection connection = null;
     PreparedStatement statement = null;
     
     try {
-      connection = new ConnectImpl().getConnection();
       statement = connection.prepareStatement( CREATE );
       statement.setString(1, customer.getFirstName());
       statement.setString(2, customer.getLastName());
@@ -62,13 +58,11 @@ public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hv
     }
   }
   
-  public void deleteCustomer(int customerID) throws SQLException { //troede måske vi fik brug for den til unit tests.
+  public void deleteCustomer(Connection connection, int customerID) throws SQLException { //troede måske vi fik brug for den til unit tests.
     
-    Connection connection = null;
     PreparedStatement statement = null;
     
     try {
-      connection = new ConnectImpl().getConnection();
       statement = connection.prepareStatement(DELETE_FROM_ID);
       statement.setInt(1, customerID);
       statement.execute();

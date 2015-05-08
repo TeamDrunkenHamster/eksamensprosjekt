@@ -2,6 +2,8 @@ package logic;
 
 import java.sql.SQLException;
 
+import dataLayer.Connect;
+import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
 import dataLayer.CustomerDAOImpl;
 import domainLayer.Customer;
@@ -10,9 +12,16 @@ import domainLayer.LoanOffer;
 public class LoanOfferReaderImpl implements LoanOfferReader {
 
 	CustomerDAO customerDAO;
+	Connect connect;
 	
 	public LoanOfferReaderImpl() {
 		
+		try {
+			connect = new ConnectImpl();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		customerDAO = new CustomerDAOImpl();
 	}
 	
@@ -26,7 +35,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	public Customer readCustomer(int customerID) {
 		
 		try {
-			return customerDAO.readCustomer(customerID);
+			return customerDAO.readCustomer(connect.getConnection(), customerID);
 		} catch (SQLException e) {
 			return new Customer();
 		}

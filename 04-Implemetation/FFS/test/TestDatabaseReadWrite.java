@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
 
+import dataLayer.Connect;
+import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAOImpl;
 import domainLayer.Customer;
 
@@ -15,13 +17,14 @@ public class TestDatabaseReadWrite {
 
 	CustomerDAOImpl customerDAO = null;
 	Customer testCustomer = null;
-	
+	Connect connect = null;
 	
 	@Before
 	public void setUp() throws Exception {
 		
 		customerDAO = new CustomerDAOImpl();
 		testCustomer = new Customer();
+		connect = new ConnectImpl();
 	}
 
 	@Test
@@ -33,7 +36,7 @@ public class TestDatabaseReadWrite {
 		
 //		customerDAO.createCustomer(testCustomer);
 		
-		Customer fromDatabase = customerDAO.readCustomer(1);
+		Customer fromDatabase = customerDAO.readCustomer(connect.getConnection(), 1);
 		
 		assertThat(fromDatabase.getFirstName(), is(equalTo(testCustomer.getFirstName())));
 		assertThat(fromDatabase.getLastName(), is(equalTo(testCustomer.getLastName())));
