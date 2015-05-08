@@ -14,26 +14,30 @@ import domainLayer.Customer;
 public class TestDatabaseReadWrite {
 
 	CustomerDAOImpl customerDAO = null;
-	Customer customer = null;
+	Customer testCustomer = null;
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		
 		customerDAO = new CustomerDAOImpl();
-		customer = new Customer();
+		testCustomer = new Customer();
 	}
 
 	@Test
 	public void testInsertAndReadCustomer() throws SQLException {
 		
-		customer.setFirstName("Hans");
-		customer.setLastName("Iversen");
-		customer.setBadStanding(1);
+		testCustomer.setFirstName("Hans");
+		testCustomer.setLastName("Iversen");
+		testCustomer.setBadStanding(1);
 		
-		customerDAO.createCustomer(customer);
+//		customerDAO.createCustomer(testCustomer);
 		
-		assertThat(customerDAO.readCustomer(1), is(equalTo(customer)));
+		Customer fromDatabase = customerDAO.readCustomer(1);
+		
+		assertThat(fromDatabase.getFirstName(), is(equalTo(testCustomer.getFirstName())));
+		assertThat(fromDatabase.getLastName(), is(equalTo(testCustomer.getLastName())));
+		assertThat(fromDatabase.getBadStanding(), is(equalTo(testCustomer.getBadStanding())));
 		//Dette virker ikke pga det skabte Customer objekt ikke har nogen ID endnu,
 		//men Customer objektet som readCustomer() returnerer har en ID.
 	}

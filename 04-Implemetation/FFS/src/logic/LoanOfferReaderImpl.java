@@ -1,6 +1,9 @@
 package logic;
 
+import java.sql.SQLException;
+
 import dataLayer.CustomerDAO;
+import dataLayer.CustomerDAOImpl;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
 
@@ -9,7 +12,8 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	CustomerDAO customerDAO;
 	
 	public LoanOfferReaderImpl() {
-		customerDAO = CustomerDAOImpl;
+		
+		customerDAO = new CustomerDAOImpl();
 	}
 	
 	@Override
@@ -21,7 +25,11 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	@Override
 	public Customer readCustomer(int customerID) {
 		
-		return customerDAO.readCustomer(customerID);
+		try {
+			return customerDAO.readCustomer(customerID);
+		} catch (SQLException e) {
+			return new Customer();
+		}
 	}
 
 	

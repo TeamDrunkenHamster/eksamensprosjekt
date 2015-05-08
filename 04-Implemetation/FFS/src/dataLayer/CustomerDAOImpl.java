@@ -31,7 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hv
         customer.setId(resultSet.getInt("customerID"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
-        customer.setId(resultSet.getInt("customerID"));
+        customer.setBadStanding(resultSet.getInt("badStanding"));
       }
     } finally {
       if (statement != null)

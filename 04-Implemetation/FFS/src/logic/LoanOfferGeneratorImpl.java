@@ -1,6 +1,9 @@
 package logic;
 
+import java.sql.SQLException;
+
 import dataLayer.CustomerDAO;
+import dataLayer.CustomerDAOImpl;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
 
@@ -12,7 +15,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	
 	public LoanOfferGeneratorImpl() {
 		
-		customerDAO = new CustomerDAOImpl;
+		customerDAO = new CustomerDAOImpl();
 	}
 	
 	@Override
@@ -23,7 +26,12 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	@Override
 	public void createCustomer(Customer customer) {
 		
-		customerDAO.createCustomer(customer);
+		try {
+			customerDAO.createCustomer(customer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
