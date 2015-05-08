@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,6 +17,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+
+import logic.FFSObserver;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -112,6 +115,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	}	
 	
 	@Override
-	public void update(Observable o, Object arg) {	
+	public void update() {
+		// TODO Auto-generated method stub		
 	}
 }
