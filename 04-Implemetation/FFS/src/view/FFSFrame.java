@@ -1,12 +1,20 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements Observer{
@@ -15,17 +23,75 @@ public class FFSFrame extends JFrame implements Observer{
 	
 	public FFSFrame(){
 		setDefaultSettings();
-
+		initTabs();
 	}
 
-
 	private void setDefaultSettings() {
+		Dimension minSize = new Dimension(800,600);
+		setMinimumSize(minSize);		
 		setTitle("Ferrari Financing System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension d = new Dimension(800,600);
-		setMinimumSize(d);
-		setVisible(true);
-		JPanel createOfferPane = new JPanel();
+		setVisible(true);	
+	}
+
+	private void initTabs() {
+		JPanel createOfferPane = new JPanel(new GridBagLayout());
+		JPanel westPanel = new JPanel(new GridBagLayout());
+		JPanel eastPanel = new JPanel(new GridBagLayout());
+		
+		GridBagConstraints gc = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
+		
+		JLabel customerCPR = new JLabel("CPR");
+		JLabel customerFirstName = new JLabel("First name");
+		JLabel customerLastName = new JLabel("Last name");
+		JLabel customerStanding = new JLabel("Current standing ");
+		
+		final int textFieldSize = 20;
+		JTextField customerCPRTextField = new JTextField(textFieldSize);
+		JTextField customerFirstNameTextField = new JTextField(textFieldSize);
+		JTextField customerLastNameTextField = new JTextField(textFieldSize);		
+				
+		createOfferPane.add(westPanel,gc);
+		gc.gridx = 1;
+		gc.fill = GridBagConstraints.HORIZONTAL;
+		createOfferPane.add(eastPanel,gc);
+		gc.gridx = 0;
+		
+		westPanel.setBackground(new Color(0,50,200));		
+		westPanel.add(customerCPR, gc);
+		gc.gridx = 1;
+		westPanel.add(customerCPRTextField, gc);
+		gc.gridx = 0;
+		gc.gridy += 1;
+		westPanel.add(customerFirstName,gc);
+		gc.gridx += 1;
+		westPanel.add(customerFirstNameTextField,gc);
+		gc.gridx = 0;
+		gc.gridy += 1;
+		westPanel.add(customerLastName,gc);
+		gc.gridx += 1;
+		westPanel.add(customerLastNameTextField,gc);
+		gc.gridx = 0;
+		gc.gridy += 1;
+		westPanel.add(customerStanding, gc);		
+		
+		
+		//east blob style
+		JScrollPane spEast = new JScrollPane();
+		String[] header = {"First Name", "Last Name"};
+		String[][] data  = {{"Ja", "Tak"},
+							{"nej", "Tak"}};
+		
+		JTable tEast = new JTable(data, header);
+		spEast.add(tEast);
+		
+		gc.gridx = 1;
+		gc.gridy = 0;	
+		eastPanel.setBackground(new Color(200,50,0));
+		eastPanel.add(new JLabel("show yourself!"),gc);
+		gc.gridy +=1;
+		eastPanel.add(spEast, gc);
+
 		tabPane.add("Create Offer", createOfferPane);
 		getContentPane().add(tabPane);
 	}
