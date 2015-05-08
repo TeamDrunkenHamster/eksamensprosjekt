@@ -101,7 +101,7 @@ public class FFSFrame extends JFrame implements Observer{
 							{"nej", "Tak"}};
 		
 		JTable tEast = new JTable(data, header);
-		spEast.add(tEast);
+		spEast.setViewportView(tEast);
 		
 		gc.gridx = 1;
 		gc.gridy = 0;	
