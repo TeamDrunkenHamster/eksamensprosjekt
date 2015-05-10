@@ -1,2 +1,15 @@
 Test1: writeToCSV
+    intput:
+        One object containing:
+            loanID: 1
+            paymentInMonths: 24
+            totalIntrestRate: 20.4
+            downPayment: 2000.2
+            loanSize: 500305.20
+            apr: 10.0
+            cprNumber: 1924250290
+            salesmanID: 1
+            customerID: 14
+            carID: 2
+
 Test2: writeSeveralObjectsToCSV
