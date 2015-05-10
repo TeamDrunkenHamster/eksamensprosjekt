@@ -1,0 +1,20 @@
+Test1: CprShouldNotBeOver10Digits
+Test2: CprShouldNotBeUnder10Digits
+Test3: CprShouldOnlyContainDigits
+Test4: FirstNameShouldOnlyContainValidSigns
+Test5: LastNameShouldOnlyContainValidSigns
+Test6: MoreInputValidation
+
+TestX: IntrestRatingCalculation
+---- || ----
+
+TestX2: CredRatingAShouldGiveOnePPoint
+TestX3: CredRaintBShouldGiveTwoPPoints
+TestX4: CredRatingCShouldGiveThreePPoints
+TestX5: CreditRatingDShouldBeRejected
+TestX6: InitialPaymentBelow50ShoulGiveOnePPoint
+TestX7: PaymentPlanAboveThreeYearsGiveOnePPoint
+
+
+
+
