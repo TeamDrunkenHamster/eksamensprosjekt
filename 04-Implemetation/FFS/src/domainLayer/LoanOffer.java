@@ -5,14 +5,36 @@ public class LoanOffer {
 	private int loanID;
 	private int paymentInMonths;
 	private double totalInterestRate;
+	private String startDate;
 	private double downPayment;
 	private double loanSize;
 	private double apr;
+	private String creditRating;
 	private String cprNumber;
 	private Salesman salesman;
 	private Customer customer;
 	private Car car;
 	
+	public String getStartDate() {
+
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		
+		this.startDate = startDate;
+	}
+
+	public String getCreditRating() {
+		
+		return creditRating;
+	}
+
+	public void setCreditRating(String creditRating) {
+		
+		this.creditRating = creditRating;
+	}
+
 	public int getLoanID() {
 		
 		return loanID;
