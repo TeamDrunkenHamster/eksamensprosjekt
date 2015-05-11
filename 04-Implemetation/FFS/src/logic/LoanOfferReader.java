@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.List;
+
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
 
@@ -12,4 +14,6 @@ public interface LoanOfferReader {
 	public void addObserver(FFSObserver observer);
 	
 	public void notifyObservers();
+
+  public List<Customer> readAllCustomers();
 }
