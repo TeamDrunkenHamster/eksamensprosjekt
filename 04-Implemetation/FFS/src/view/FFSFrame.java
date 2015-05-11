@@ -19,21 +19,30 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import domainLayer.LoanOffer;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
+import logic.LoanOfferGenerator;
+import logic.LoanOfferGeneratorImpl;
+import logic.LoanOfferReader;
+import logic.LoanOfferReaderImpl;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
+	private LoanOfferGenerator loanOG = new LoanOfferGeneratorImpl();
+	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
 		initTabs();
 		databaseBuilder.createDatabase();
+		loanOG.addObserver(this);
+		loanOR.addObserver(this);
 	}
 
 	private void setTheme() {
