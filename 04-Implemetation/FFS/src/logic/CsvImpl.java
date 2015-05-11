@@ -29,7 +29,7 @@ public class CsvImpl implements Csv {
 		csvString.append(DELIMITER);
 		csvString.append(loanOffer.getLoanSize());
 		csvString.append(DELIMITER);
-		csvString.append(loanOffer.getTotalIntrestRate());
+		csvString.append(loanOffer.getTotalInterestRate());
 		csvString.append(DELIMITER);
 		csvString.append(loanOffer.getDownPayment());
 		csvString.append(DELIMITER);
