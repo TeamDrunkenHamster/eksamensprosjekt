@@ -1,9 +1,35 @@
 Test1: CprShouldNotBeOver10Digits
+    input:
+        123456
+    output:
+        Ugyldig CPR nummer
+
 Test2: CprShouldNotBeUnder10Digits
+    input:
+        12345678901
+    output:
+        Ugyldig CPR nummer
+
 Test3: CprShouldOnlyContainDigits
+    input:
+        123456789A
+    output:
+        Ugyldig CPR nummer
+
 Test4: FirstNameShouldOnlyContainValidSigns
+    input:
+        Hans; DROP TABLE Customer
+    output:
+        Navn skal kun indeholde bogstaver
+
 Test5: LastNameShouldOnlyContainValidSigns
+    input:
+        Iversen 1337
+    output:
+        Navn skal kun indeholde bogstaver
+
 Test6: MoreInputValidation
+    ?
 
 TestX: IntrestRatingCalculation
 ---- || ----
