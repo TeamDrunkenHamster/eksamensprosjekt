@@ -21,12 +21,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	
 	public LoanOfferReaderImpl() {
 		
-		try {
-			connect = new ConnectImpl();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		createConnection();
 		customerDAO = new CustomerDAOImpl();
 	}
 	
@@ -40,17 +35,12 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	public Customer readCustomer(int customerID) {
 		
 		try {
-			connection = connect.getConnection();
+			createConnection();
 			return customerDAO.readCustomerFromID(connection, customerID);
 		} catch (SQLException e) {
 			return new Customer();
 		} finally {
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 	}
 	
@@ -60,20 +50,32 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	   List<Customer> customerList = null;
 	    
 	    try {
-	      connection = connect.getConnection();
+	      createConnection();
 	      return customerDAO.readAllCustomers(connection);
 	    } catch (SQLException e) {
 	      return customerList = new ArrayList<Customer>();
 	    } finally {
-	      try {
-	        if (connection != null)
-	          connection.close();
-	      } catch (SQLException e) {
-	        e.printStackTrace();
-	      }
+	      closeConnection();
 	    }
 	  }
+	 
+	 private void createConnection() {
+			try {
+				connect = new ConnectImpl();
+				connection = connect.getConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
+	 private void closeConnection() {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	 
 	@Override
 	public void addObserver(FFSObserver observer) {
 

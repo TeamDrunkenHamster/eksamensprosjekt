@@ -52,19 +52,17 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			e.printStackTrace();
 		} finally {
 			if (connection != null)
-				closeCrap();
+				closeConnection();
 		}
 		
 		notifyObservers();
 	}
 
-	private void closeCrap() {
+	private void closeConnection() {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			
 			e.printStackTrace();
-			
 		}
 	}
 
