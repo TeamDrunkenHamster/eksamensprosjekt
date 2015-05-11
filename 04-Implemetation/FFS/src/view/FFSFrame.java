@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,6 +30,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		setTheme();
 		setDefaultSettings();
 		initTabs();
+		DatabaseBuilder().createDatabase();
 	}
 
 	private void setTheme() {
@@ -53,12 +57,32 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	}
 
 	private void initTabs() {
-		JPanel createOfferPane = new JPanel(new GridBagLayout());
-		JPanel westPanel = new JPanel(new GridBagLayout());
-		JPanel eastPanel = new JPanel(new GridBagLayout());
+		addLoanOffersTab("Loan Offers");
+	}
+
+	private void addLoanOffersTab(String tabTitle) {
+		JPanel baseTabPanel = new JPanel(new GridBagLayout());
+		JPanel userInputPanel = new JPanel(new GridBagLayout());
+		JPanel tablePanel = new JPanel(new GridBagLayout());
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		
 		GridBagConstraints gc = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
 		
+		gc.weightx = 0;
+		baseTabPanel.add(userInputPanel,gc);
+		gc.gridy = 1;
+		gc.anchor = GridBagConstraints.LAST_LINE_END;
+		baseTabPanel.add(buttonPanel,gc);
+		gc.anchor = GridBagConstraints.FIRST_LINE_START;
+		gc.gridy = 0;
+		gc.gridx = 1;
+		gc.weightx = 1;
+		gc.gridheight = 2;
+		gc.fill = GridBagConstraints.BOTH;
+		baseTabPanel.add(tablePanel,gc);
+		gc.gridheight = 1;
+		
+		//userinput panel
 		JLabel customerCPR = new JLabel("CPR");
 		JLabel customerFirstName = new JLabel("First name");
 		JLabel customerLastName = new JLabel("Last name");
@@ -67,35 +91,29 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		final int textFieldLength = 20;
 		JTextField customerCPRTextField = new JTextField(textFieldLength);
 		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
-		JTextField customerLastNameTextField = new JTextField(textFieldLength);		
-
-		gc.weightx = 0;
-		createOfferPane.add(westPanel,gc);
-		gc.gridx = 1;
-		gc.weightx = 1;
-		gc.fill = GridBagConstraints.BOTH;
-		createOfferPane.add(eastPanel,gc);
-		gc.gridx = 0;
+		JTextField customerLastNameTextField = new JTextField(textFieldLength);
 		
-		westPanel.setBackground(new Color(0,50,200));		
-		westPanel.add(customerCPR, gc);
-		gc.gridx = 1;
-		westPanel.add(customerCPRTextField, gc);
+		userInputPanel.setBackground(new Color(0,50,200));
 		gc.gridx = 0;
-		gc.gridy += 1;
-		westPanel.add(customerFirstName,gc);
+		gc.gridy = 0;
+		userInputPanel.add(customerCPR, gc);
 		gc.gridx += 1;
-		westPanel.add(customerFirstNameTextField,gc);
+		userInputPanel.add(customerCPRTextField, gc);
 		gc.gridx = 0;
 		gc.gridy += 1;
-		westPanel.add(customerLastName,gc);
+		userInputPanel.add(customerFirstName,gc);
 		gc.gridx += 1;
-		westPanel.add(customerLastNameTextField,gc);
+		userInputPanel.add(customerFirstNameTextField,gc);
 		gc.gridx = 0;
 		gc.gridy += 1;
-		westPanel.add(customerStanding, gc);
+		userInputPanel.add(customerLastName,gc);
+		gc.gridx += 1;
+		userInputPanel.add(customerLastNameTextField,gc);
+		gc.gridx = 0;
+		gc.gridy += 1;
+		userInputPanel.add(customerStanding, gc);
 		
-		//east blob style
+		//tablepanel
 		JScrollPane spEast = new JScrollPane();
 		String[] header = {"First Name", "Last Name"};
 		String[][] data  = {};
@@ -106,11 +124,26 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		
 		gc.gridx = 1;
 		gc.gridy = 0;	
-		eastPanel.setBackground(new Color(200,50,0));
+		tablePanel.setBackground(new Color(200,50,0));
 		gc.gridy +=1;
-		eastPanel.add(spEast, gc);
+		tablePanel.add(spEast, gc);
 
-		tabPane.add("Create Offer", createOfferPane);
+		//button panel
+		buttonPanel.setBackground(new Color(200,50,200));
+		JButton createButton = new JButton();
+		createButton.setText("create");
+		createButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Create offer				
+			}
+		});
+		
+		buttonPanel.add(createButton, gc);
+		
+		//add it all to the basePanel
+		tabPane.add(tabTitle, baseTabPanel);
 		getContentPane().add(tabPane);
 	}	
 	
