@@ -107,13 +107,6 @@ public class CustomerDAOImpl implements CustomerDAO {
         statement.close();
     }
   }
-
-
-  @Override
-  public Customer readCustomer( Connection connection, int customerID ) throws SQLException {
-    // TODO Auto-generated method stub
-    return null;
-  }
   
 }
   
