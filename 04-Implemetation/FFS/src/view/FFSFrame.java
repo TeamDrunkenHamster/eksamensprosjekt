@@ -19,18 +19,21 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import logic.DatabaseBuilder;
+import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
+	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
 		initTabs();
-		DatabaseBuilder().createDatabase();
+		databaseBuilder.createDatabase();
 	}
 
 	private void setTheme() {
