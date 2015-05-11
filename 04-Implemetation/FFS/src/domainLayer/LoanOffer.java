@@ -4,7 +4,7 @@ public class LoanOffer {
 
 	private int loanID;
 	private int paymentInMonths;
-	private double totalIntrestRate;
+	private double totalInterestRate;
 	private double downPayment;
 	private double loanSize;
 	private double apr;
@@ -33,14 +33,14 @@ public class LoanOffer {
 		this.paymentInMonths = paymentInMonths;
 	}
 	
-	public double getTotalIntrestRate() {
+	public double getTotalInterestRate() {
 		
-		return totalIntrestRate;
+		return totalInterestRate;
 	}
 	
-	public void setTotalIntrestRate(double totalIntrestRate) {
+	public void setTotalInterestRate(double totalInterestRate) {
 		
-		this.totalIntrestRate = totalIntrestRate;
+		this.totalInterestRate = totalInterestRate;
 	}
 	
 	public double getDownPayment() {
