@@ -60,7 +60,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
 	private void closeCrap() {
 		try {
-			System.out.println("5");
 			connection.close();
 		} catch (SQLException e) {
 			
