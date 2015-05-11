@@ -17,7 +17,7 @@ public class DatabaseBuilderImpl implements DatabaseBuilder {
 			Connect connect = new ConnectImpl();
 			Connection connection = connect.getConnection();
 			DatabaseSetup dbSetup = new DatabaseSetupImpl();
-			dbSetup.createTables(connection);
+			dbSetup.createDatabase(connection);
 			connection.close();
 		} catch (SQLException e) {
 			System.out.println("database error!");
