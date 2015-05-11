@@ -41,7 +41,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 		
 		try {
 			connection = connect.getConnection();
-			return customerDAO.readCustomer(connection, customerID);
+			return customerDAO.readCustomerFromID(connection, customerID);
 		} catch (SQLException e) {
 			return new Customer();
 		} finally {
@@ -53,6 +53,26 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			}
 		}
 	}
+	
+	 @Override
+	  public List<Customer> readAllCustomers() {
+	   
+	   List<Customer> customerList = null;
+	    
+	    try {
+	      connection = connect.getConnection();
+	      return customerDAO.readAllCustomers(connection);
+	    } catch (SQLException e) {
+	      return customerList = new ArrayList<Customer>();
+	    } finally {
+	      try {
+	        if (connection != null)
+	          connection.close();
+	      } catch (SQLException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	  }
 
 	@Override
 	public void addObserver(FFSObserver observer) {
