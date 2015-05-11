@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import domainLayer.Customer;
 import domainLayer.LoanOffer;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
@@ -148,7 +149,11 @@ public class FFSFrame extends JFrame implements FFSObserver{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Create offer				
+				Customer customer = new Customer();
+				customer.setFirstName(customerFirstNameTextField.getText());
+				customer.setLastName(customerLastNameTextField.getText());
+				customer.setBadStanding(0);
+				loanOG.createCustomer(customer);
 			}
 		});
 		
