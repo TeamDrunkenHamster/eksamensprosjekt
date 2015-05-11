@@ -19,8 +19,6 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import domainLayer.Customer;
-import domainLayer.LoanOffer;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
@@ -28,6 +26,7 @@ import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
+import domainLayer.Customer;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -36,7 +35,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferGenerator loanOG = new LoanOfferGeneratorImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
-	
+
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
@@ -80,6 +79,8 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		
 		GridBagConstraints gc = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
+		
+		
 		
 		gc.weightx = 0;
 		baseTabPanel.add(userInputPanel,gc);
@@ -162,10 +163,9 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		//add it all to the basePanel
 		tabPane.add(tabTitle, baseTabPanel);
 		getContentPane().add(tabPane);
-	}	
+	}			
 	
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub		
+	public void update() {		
 	}
 }
