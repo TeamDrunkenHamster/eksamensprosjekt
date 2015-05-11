@@ -61,7 +61,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	}
 
 	private void setDefaultSettings() {
-		Dimension minSize = new Dimension(1024, 768);
+		Dimension minSize = new Dimension(1024, 700);
 		setMinimumSize(minSize);		
 		setTitle("Ferrari Financing System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
