@@ -4,16 +4,50 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import domainLayer.Customer;
 
-public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hvad vi blev enige om at kalde klassen.
+public class CustomerDAOImpl implements CustomerDAO {
   
+  private static final String SELECT_ALL = "SELECT * FROM Customer";
   private static final String SELECT_FROM_ID = "SELECT customerID, firstName, lastName, badStanding FROM Customer WHERE customerID = ?";
   private static final String CREATE = "INSERT INTO Customer (firstName, lastName, badStanding) VALUES (?, ?, ?)";
   private static final String DELETE_FROM_ID = "DELETE FROM Customer WHERE customerID = ?";
   
-  public Customer readCustomer(Connection connection, int customerID) throws SQLException {
+  
+  public List<Customer> readAllCustomers(Connection connection) throws SQLException {
+    
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
+    Customer customer = null;
+    List<Customer> customerList = null;  
+    
+    try {
+      statement = connection.prepareStatement( SELECT_ALL );
+      resultSet = statement.executeQuery();
+      customerList = new ArrayList<Customer>();
+      
+      while(resultSet.next()) {
+        customer = new Customer();
+        customer.setId(resultSet.getInt("customerID"));
+        customer.setFirstName(resultSet.getString("firstName"));
+        customer.setLastName(resultSet.getString("lastName"));
+        customer.setBadStanding(resultSet.getInt("badStanding"));
+        customerList.add(customer);
+      }
+    } finally {
+      if (statement != null)
+        statement.close();
+      if (resultSet != null)
+        resultSet.close();
+    }
+    return customerList;
+  }
+
+  
+  public Customer readCustomerFromID(Connection connection, int customerID) throws SQLException {
     
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -72,6 +106,13 @@ public class CustomerDAOImpl implements CustomerDAO { //Jeg kunne ikke huske, hv
       if (statement != null)
         statement.close();
     }
+  }
+
+
+  @Override
+  public Customer readCustomer( Connection connection, int customerID ) throws SQLException {
+    // TODO Auto-generated method stub
+    return null;
   }
   
 }
