@@ -23,13 +23,18 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	
 	public LoanOfferGeneratorImpl() {
 		
+		createConnection();
+		customerDAO = new CustomerDAOImpl();
+	}
+
+	private void createConnection() {
 		try {
 			connect = new ConnectImpl();
+			connection = connect.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		customerDAO = new CustomerDAOImpl();
 	}
 	
 	@Override
@@ -40,21 +45,28 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	@Override
 	public void createCustomer(Customer customer) {
 		
+		createConnection();
 		try {
-			connection = connect.getConnection();
 			customerDAO.createCustomer(connection, customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-				try {
-					if (connection != null)
-						connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			if (connection != null)
+				closeCrap();
 		}
 		
 		notifyObservers();
+	}
+
+	private void closeCrap() {
+		try {
+			System.out.println("5");
+			connection.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			
+		}
 	}
 
 	@Override
