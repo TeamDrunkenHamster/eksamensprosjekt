@@ -36,7 +36,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 		
 		try {
 			createConnection();
-			return customerDAO.readCustomerFromID(connection, customerID);
+			return customerDAO.readCustomer(connection, customerID);
 		} catch (SQLException e) {
 			return new Customer();
 		} finally {
