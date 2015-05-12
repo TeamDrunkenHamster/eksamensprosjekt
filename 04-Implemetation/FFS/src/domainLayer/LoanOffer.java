@@ -14,6 +14,17 @@ public class LoanOffer {
 	private Salesman salesman;
 	private Customer customer;
 	private Car car;
+	private boolean rejected;
+	
+	public boolean getRejected() {
+		
+		return rejected;
+	}
+	
+	public void setRejected(boolean rejected) {
+		
+		this.rejected = rejected;
+	}
 	
 	public String getStartDate() {
 
