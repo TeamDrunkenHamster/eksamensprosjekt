@@ -11,8 +11,10 @@ public class DatabaseSetupImpl implements DatabaseSetup {
   private static final String CREATE_SALESMAN_TABLE = "CREATE TABLE IF NOT EXISTS Salesman(salesmanID INTEGER PRIMARY KEY, firstName VARCHAR(255), lastName VARCHAR(255), loanValueLimit INTEGER)";
   
   public void createDatabase(Connection connection) throws SQLException {
+    
     createTable(connection, CREATE_CUSTOMER_TABLE);
     createTable(connection, CREATE_SALESMAN_TABLE);
+    
   }
   
   private void createTable(Connection connection, String sql) throws SQLException {
