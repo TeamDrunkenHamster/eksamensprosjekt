@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,8 +18,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.TableModel;
 
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
@@ -35,11 +40,17 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferGenerator loanOG = new LoanOfferGeneratorImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
+	private List<Customer> customerList = new ArrayList<>();
+	private CustomerTable customerTable = new CustomerTable();
+	private TableModel tableMoodel;
+	private JTable tEast = new JTable();
+	private JScrollPane spEast = new JScrollPane();
 
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
 		initTabs();
+		update();
 		databaseBuilder.createDatabase();
 		loanOG.addObserver(this);
 		loanOR.addObserver(this);
@@ -107,7 +118,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
 		JTextField customerLastNameTextField = new JTextField(textFieldLength);
 		
-		userInputPanel.setBackground(new Color(0,50,200));
+//		userInputPanel.setBackground(new Color(0,50,200));
 		gc.gridx = 0;
 		gc.gridy = 0;
 		userInputPanel.add(customerCPR, gc);
@@ -127,15 +138,6 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		gc.gridy += 1;
 		userInputPanel.add(customerStanding, gc);
 		
-		//tablepanel
-		JScrollPane spEast = new JScrollPane();
-		String[] header = {"First Name", "Last Name"};
-		String[][] data  = {};
-		
-		JTable tEast = new JTable(data, header);
-		spEast.setViewportView(tEast);
-		tEast.setFillsViewportHeight(true);
-		
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		tablePanel.setBackground(new Color(200,50,0));
@@ -143,9 +145,9 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		tablePanel.add(spEast, gc);
 
 		//button panel
-		buttonPanel.setBackground(new Color(200,50,200));
+//		buttonPanel.setBackground(new Color(200,50,200));
 		JButton createButton = new JButton();
-		createButton.setText("create");
+		createButton.setText("Create");
 		createButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -163,9 +165,35 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		//add it all to the basePanel
 		tabPane.add(tabTitle, baseTabPanel);
 		getContentPane().add(tabPane);
+	}
+
+	private void drawTable() {
+		tEast = setCustomerTable();
+		
+		tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tEast.setFillsViewportHeight(true);
+		spEast.setViewportView(tEast);
 	}			
 	
+	private JTable setCustomerTable() {
+
+		if (customerList.isEmpty()) {
+			String[] header = {"ID", "First Name", "Last Name", "Standing"};
+			String[][] data  = {};
+			tEast = new JTable(data, header);
+			return tEast;
+		}
+		else {
+			tEast = new JTable();
+			tableMoodel = customerTable.getCustomerTable(customerList);
+			tEast.setModel(tableMoodel);
+			return tEast;
+		}
+	}
+
 	@Override
-	public void update() {		
+	public void update() {
+		customerList = loanOR.readAllCustomers();
+		drawTable();
 	}
 }
