@@ -79,5 +79,18 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		for (FFSObserver observer : observers)
 			observer.update();
 	}
-
+	
+	private boolean getCustomerStanding(Connection connection, int CPR ){
+		try {
+			Customer temp = customerDAO.readCustomer(this.connection, CPR);
+			if(temp.getBadStanding() >= 1){
+				return true;
+			}else
+				return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
