@@ -14,6 +14,8 @@ import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
 import dataLayer.CustomerDAOImpl;
+import dataLayer.LoanOfferDAO;
+import dataLayer.LoanOfferDAOImpl;
 import dataLayer.SalesmanDAO;
 import dataLayer.SalesmanDAOImpl;
 import domainLayer.Car;
@@ -35,6 +37,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private Connect connect;
 	private Connection connection;
 	private List<FFSObserver> observers = new ArrayList<>();
+	double bankRate;
 	
 	public LoanOfferGeneratorImpl() {
 		
@@ -60,7 +63,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	public void createLoanOffer(LoanOffer loanOffer) {
 		
 		createConnection();
-		double bankRate;
+		
 		
 		this.customer = loanOffer.getCustomer();
 		
@@ -92,13 +95,21 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		bankRateThread.start();
 		creditRateThread.start();
 		
-		bankRateThread.join();
-		creditRateThread.join();
+		try {
+			bankRateThread.join();
+			creditRateThread.join();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
 		
 		
 		calculateLoanOffer(bankRate);
-		
-		loanOfferDAO.createLoanOffer(loanOffer);
+		try {
+			loanOfferDAO.createLoanOffer(connection, loanOffer);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
