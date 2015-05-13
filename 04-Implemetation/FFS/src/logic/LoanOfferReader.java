@@ -9,11 +9,13 @@ public interface LoanOfferReader {
 
 	public LoanOffer readLoanOffer(int loanOfferID);
 	
+	public List<LoanOffer> readAllLoanOffers();
+
 	public Customer readCustomer(String CPR);
-	
+
 	public void addObserver(FFSObserver observer);
-	
+
 	public void notifyObservers();
 
-  public List<Customer> readAllCustomers();
+	public List<Customer> readAllCustomers();
 }

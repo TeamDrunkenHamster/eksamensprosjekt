@@ -3,18 +3,23 @@ package logic;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
 import dataLayer.CustomerDAOImpl;
+import dataLayer.LoanOfferDAO;
+import dataLayer.LoanOfferDAOImpl;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
 
 public class LoanOfferReaderImpl implements LoanOfferReader {
 
 	CustomerDAO customerDAO;
+	LoanOfferDAO loanOfferDAO;
 	Connect connect;
 	Connection connection;
 	List<FFSObserver> observers = new ArrayList<>();
@@ -23,12 +28,26 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 		
 		createConnection();
 		customerDAO = new CustomerDAOImpl();
+		loanOfferDAO = new LoanOfferDAOImpl();
 	}
 	
 	@Override
 	public LoanOffer readLoanOffer(int loanOfferID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public List<LoanOffer> readAllLoanOffers() {
+		
+		try {
+			createConnection();
+			return loanOfferDAO.readAllLoanOffers(connection);
+		} catch (SQLException e) {
+			return Collections.<LoanOffer>emptyList();
+		} finally {
+			closeConnection();
+		}
 	}
 
 	@Override
@@ -89,6 +108,8 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 		for (FFSObserver observer : observers)
 			observer.update();
 	}
+
+
 
 	
 }
