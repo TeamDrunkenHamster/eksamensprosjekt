@@ -64,9 +64,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		this.customer = loanOffer.getCustomer();
 		
-		int badStanding = getCustomerStanding(customer.getId());
+		boolean badStanding = getCustomerStanding(connection, customer.getCPR());
 		
-		if (badStanding == 0) {
+		if (badStanding) {
 			rejectOffer();
 			return;
 		}
@@ -97,9 +97,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		
 		calculateLoanOffer(bankRate);
-		
-		if (badStanding == -1)
-			customerDAO.createCustomer(connection, customer);
 		
 		loanOfferDAO.createLoanOffer(loanOffer);
 		
@@ -163,15 +160,10 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	}
 	
 	private boolean getCustomerStanding(Connection connection, String CPR ){
+		
 		try {
-			Customer temp = customerDAO.readCustomer(this.connection, CPR);
-			if(temp.getBadStanding() >= 1){
-				return true;
-			}else
-				return false;
+			return customerDAO.readCustomer(this.connection, CPR).getBadStanding();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return false;
 		}
 	}
