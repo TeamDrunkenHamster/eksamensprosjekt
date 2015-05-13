@@ -9,7 +9,7 @@ public interface LoanOfferReader {
 
 	public LoanOffer readLoanOffer(int loanOfferID);
 	
-	public Customer readCustomer(int customerID);
+	public Customer readCustomer(String CPR);
 	
 	public void addObserver(FFSObserver observer);
 	

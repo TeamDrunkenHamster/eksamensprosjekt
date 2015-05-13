@@ -32,11 +32,11 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	}
 
 	@Override
-	public Customer readCustomer(int customerID) {
+	public Customer readCustomer(String CPR) {
 		
 		try {
 			createConnection();
-			return customerDAO.readCustomer(connection, customerID);
+			return customerDAO.readCustomer(connection, CPR);
 		} catch (SQLException e) {
 			return new Customer();
 		} finally {
