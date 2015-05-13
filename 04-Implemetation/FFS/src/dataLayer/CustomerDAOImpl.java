@@ -74,9 +74,10 @@ public class CustomerDAOImpl implements CustomerDAO {
     return customer;
   }
   
-  public void createCustomer(Connection connection, Customer customer) throws SQLException {
+  public int createCustomer(Connection connection, Customer customer) throws SQLException {
     
     PreparedStatement statement = null;
+    ResultSet resultset = null;
     
     try {
       statement = connection.prepareStatement( CREATE );
@@ -84,12 +85,17 @@ public class CustomerDAOImpl implements CustomerDAO {
       statement.setString(2, customer.getLastName());
       statement.setBoolean(3, customer.getBadStanding());
       statement.execute();
+      resultset = statement.getGeneratedKeys();
+      if (resultset.next()){
+			return resultset.getInt(1);
+		}
       connection.commit();
       
     } finally {
       if (statement != null)
         statement.close();
     }
+    return -1;
   }
   
   public void deleteCustomer(Connection connection, int customerID) throws SQLException { //troede måske vi fik brug for den til unit tests.

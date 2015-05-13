@@ -12,7 +12,7 @@ public interface CustomerDAO {
   
   public Customer readCustomer(Connection connection, String CPR) throws SQLException;
 	
-	public void createCustomer(Connection connection, Customer customer) throws SQLException;
+	public int createCustomer(Connection connection, Customer customer) throws SQLException;
 	
 	public void deleteCustomer(Connection connection, int customerID) throws SQLException;
 }
