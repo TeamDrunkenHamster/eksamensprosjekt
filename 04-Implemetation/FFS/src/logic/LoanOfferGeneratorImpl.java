@@ -159,7 +159,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			observer.update();
 	}
 	
-	private boolean getCustomerStanding(Connection connection, int CPR ){
+	private boolean getCustomerStanding(Connection connection, String CPR ){
 		try {
 			Customer temp = customerDAO.readCustomer(this.connection, CPR);
 			if(temp.getBadStanding() >= 1){
