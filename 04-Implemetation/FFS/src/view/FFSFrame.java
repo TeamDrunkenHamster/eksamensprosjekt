@@ -155,7 +155,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 				Customer customer = new Customer();
 				customer.setFirstName(customerFirstNameTextField.getText());
 				customer.setLastName(customerLastNameTextField.getText());
-				customer.setBadStanding(0);
+				customer.setBadStanding(false);
 				loanOG.createCustomer(customer);
 			}
 		});

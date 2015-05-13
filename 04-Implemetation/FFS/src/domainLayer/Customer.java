@@ -27,8 +27,8 @@ public class Customer extends Person {
 	public boolean getBadStanding() {
 		return badStanding;
 	}
-	public void setBadStanding( boolean badStanding ) {
-		this.badStanding = badStanding;
+	public void setBadStanding( boolean i ) {
+		this.badStanding = i;
 	}
 	@Override
 	public String toString() {
