@@ -14,17 +14,7 @@ public class LoanOffer {
 	private Salesman salesman;
 	private Customer customer;
 	private Car car;
-	private boolean approvedStatus;
-  private boolean rejected;
-	
-	public boolean getApprovedStatus() {
-    return approvedStatus;
-  }
-
-  public void setApprovedStatus( boolean approvedStatus ) {
-    this.approvedStatus = approvedStatus;
-  }
-
+	private boolean rejected;
 	
 	public boolean getRejected() {
 		
