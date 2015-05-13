@@ -123,7 +123,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		else
 			totalInterestRate += 3.0;
 		
-		
+		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
 
 	private void rejectOffer() {
