@@ -20,6 +20,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
                                              "LEFT JOIN Customer ON LoanOffer.customerID=Customer.customerID LEFT JOIN Salesman ON LoanOffer.salesmanID=Salesman.salesmanID LEFT JOIN Car ON LoanOffer.carID=Car.carID WHERE LoanID = ?";
   
   private static final String CREATE = "INSERT INTO LoanOffer (customerID, salesmanID, carID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                        //Skal loanOffers creates med approvedStatus på false? og hvad med rejected?
 
   public List<LoanOffer> readAllLoanOffers(Connection connection) throws SQLException {
     

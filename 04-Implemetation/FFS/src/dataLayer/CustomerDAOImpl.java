@@ -12,8 +12,8 @@ import domainLayer.Customer;
 public class CustomerDAOImpl implements CustomerDAO {
   
   private static final String SELECT_ALL = "SELECT * FROM Customer";
-  private static final String SELECT_FROM_ID = "SELECT customerID, firstName, lastName, badStanding FROM Customer WHERE customerID = ?";
-  private static final String CREATE = "INSERT INTO Customer (firstName, lastName, badStanding) VALUES (?, ?, ?)";
+  private static final String SELECT_FROM_CPR = "SELECT customerID, firstName, lastName, badStanding FROM Customer WHERE cprNumber = ?";
+  private static final String CREATE = "INSERT INTO Customer (cprNumber, firstName, lastName, badStanding) VALUES (?, ?, ?, ?)";
   private static final String DELETE_FROM_ID = "DELETE FROM Customer WHERE customerID = ?";
   
   
@@ -54,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     Customer customer = null;
       
     try {
-      statement = connection.prepareStatement( SELECT_FROM_ID );
+      statement = connection.prepareStatement( SELECT_FROM_CPR );
       statement.setString(1, CPR);
       resultSet = statement.executeQuery();
       customer = new Customer();
