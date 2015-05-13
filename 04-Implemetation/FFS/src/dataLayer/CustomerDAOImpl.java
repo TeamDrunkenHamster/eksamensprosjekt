@@ -34,7 +34,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         customer.setId(resultSet.getInt("customerID"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
-        customer.setBadStanding(resultSet.getInt("badStanding"));
+        customer.setBadStanding(resultSet.getBoolean("badStanding"));
         customerList.add(customer);
       }
     } finally {
@@ -63,7 +63,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         customer.setId(resultSet.getInt("customerID"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
-        customer.setBadStanding(resultSet.getInt("badStanding"));
+        customer.setBadStanding(resultSet.getBoolean("badStanding"));
       }
     } finally {
       if (statement != null)
@@ -82,7 +82,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       statement = connection.prepareStatement( CREATE );
       statement.setString(1, customer.getFirstName());
       statement.setString(2, customer.getLastName());
-      statement.setInt(3, customer.getBadStanding());
+      statement.setBoolean(3, customer.getBadStanding());
       statement.execute();
       connection.commit();
       
