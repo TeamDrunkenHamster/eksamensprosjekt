@@ -8,11 +8,14 @@ import java.util.List;
 import com.ferrari.finances.dk.bank.InterestRate;
 import com.ferrari.finances.dk.rki.CreditRator;
 
+import dataLayer.CarDAO;
+import dataLayer.CarDAOImpl;
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
 import dataLayer.CustomerDAOImpl;
 import dataLayer.SalesmanDAO;
+import dataLayer.SalesmanDAOImpl;
 import domainLayer.Car;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
@@ -61,7 +64,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		this.customer = loanOffer.getCustomer();
 		
-		int badStanding = getHistory(customer.getId());
+		int badStanding = getCustomerStanding(customer.getId());
 		
 		if (badStanding == 0) {
 			rejectOffer();
