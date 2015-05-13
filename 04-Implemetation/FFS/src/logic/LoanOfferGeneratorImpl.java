@@ -5,34 +5,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ferrari.finances.dk.bank.InterestRate;
+import com.ferrari.finances.dk.rki.CreditRator;
+
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
 import dataLayer.CustomerDAOImpl;
+import dataLayer.SalesmanDAO;
+import domainLayer.Car;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
+import domainLayer.Salesman;
 
 public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
-	LoanOffer loanOffer;
-	Customer customer;
-	CustomerDAO customerDAO;
-	Connect connect;
-	Connection connection;
-	List<FFSObserver> observers = new ArrayList<>();
+	private API api;
+	private LoanOffer loanOffer;
+	private Customer customer;
+	private Car car;
+	private Salesman salesman;
+	private CustomerDAO customerDAO;
+	private CarDAO carDAO;
+	private SalesmanDAO salesmanDAO;
+	private LoanOfferDAO loanOfferDAO;
+	private Connect connect;
+	private Connection connection;
+	private List<FFSObserver> observers = new ArrayList<>();
 	
 	public LoanOfferGeneratorImpl() {
 		
 		createConnection();
 		customerDAO = new CustomerDAOImpl();
+		loanOfferDAO = new LoanOfferDAOImpl();
+		salesmanDAO = new SalesmanDAOImpl();
+		carDAO = new CarDAOImpl();
+		api = new APIImpl();
 	}
 
 	private void createConnection() {
+		
 		try {
 			connect = new ConnectImpl();
 			connection = connect.getConnection();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -40,6 +56,69 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	@Override
 	public void createLoanOffer(LoanOffer loanOffer) {
 		
+		createConnection();
+		double bankRate;
+		
+		this.customer = loanOffer.getCustomer();
+		
+		int badStanding = getHistory(customer.getId());
+		
+		if (badStanding == 0) {
+			rejectOffer();
+			return;
+		}
+		
+		Thread bankRateThread = new Thread() {
+
+			@Override
+			public void run() {
+
+				bankRate = InterestRate.i().todaysRate();
+			}
+		};
+		
+		Thread creditRateThread = new Thread() {
+
+			@Override
+			public void run() {
+
+				loanOffer.setCreditRating(CreditRator.i().rate(loanOffer.getCprNumber()).toString());
+			}
+		};
+		
+		bankRateThread.start();
+		creditRateThread.start();
+		
+		bankRateThread.join();
+		creditRateThread.join();
+		
+		
+		calculateLoanOffer(bankRate);
+		
+		if (badStanding == -1)
+			customerDAO.createCustomer(connection, customer);
+		
+		loanOfferDAO.createLoanOffer(loanOffer);
+		
+	}
+
+	private void calculateLoanOffer(double bankRate) {
+		
+		double totalInterestRate = bankRate;
+		if (loanOffer.getCreditRating() == "A")
+			totalInterestRate += 1.0;
+		else if (loanOffer.getCreditRating() == "B")
+			totalInterestRate += 2.0;
+		else
+			totalInterestRate += 3.0;
+		
+		
+	}
+
+	private void rejectOffer() {
+		
+		loanOffer.setRejected(true);
+		// setRandom = null?
 	}
 
 	@Override
