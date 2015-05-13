@@ -47,7 +47,7 @@ public class CustomerDAOImpl implements CustomerDAO {
   }
 
   
-  public Customer readCustomer(Connection connection, int customerID) throws SQLException {
+  public Customer readCustomer(Connection connection, String CPR) throws SQLException {
     
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -55,7 +55,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       
     try {
       statement = connection.prepareStatement( SELECT_FROM_ID );
-      statement.setInt(1, customerID);
+      statement.setString(1, CPR);
       resultSet = statement.executeQuery();
       customer = new Customer();
       
@@ -107,6 +107,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         statement.close();
     }
   }
+
   
 }
   
