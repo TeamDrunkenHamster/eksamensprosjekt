@@ -10,7 +10,7 @@ public interface CustomerDAO {
   
   public List<Customer> readAllCustomers(Connection connection) throws SQLException;
   
-  public Customer readCustomerFromID(Connection connection, int customerID) throws SQLException;
+  public Customer readCustomer(Connection connection, int customerID) throws SQLException;
 	
 	public void createCustomer(Connection connection, Customer customer) throws SQLException;
 	
