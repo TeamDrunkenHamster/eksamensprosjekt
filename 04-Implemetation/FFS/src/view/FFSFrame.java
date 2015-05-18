@@ -100,16 +100,11 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		
 		//userinput panel
 		JLabel customerCPR = new JLabel("CPR");
-		JLabel customerFirstName = new JLabel("First name");
-		JLabel customerLastName = new JLabel("Last name");
-		JLabel customerStanding = new JLabel("Current standing ");
+		JLabel loanOfferID = new JLabel("LoanID");
 		
-		
-		//input Panel
 		final int textFieldLength = 20;
 		JTextField customerCPRTextField = new JTextField(textFieldLength);
-		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
-		JTextField customerLastNameTextField = new JTextField(textFieldLength);
+		JTextField loanOfferIDTextField = new JTextField(textFieldLength);
 		
 		userInputPanel.setBackground(new Color(0,50,200));
 		gc.gridx = 0;
@@ -119,17 +114,9 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		userInputPanel.add(customerCPRTextField, gc);
 		gc.gridx = 0;
 		gc.gridy += 1;
-		userInputPanel.add(customerFirstName,gc);
-		gc.gridx += 1;
-		userInputPanel.add(customerFirstNameTextField,gc);
-		gc.gridx = 0;
-		gc.gridy += 1;
-		userInputPanel.add(customerLastName,gc);
-		gc.gridx += 1;
-		userInputPanel.add(customerLastNameTextField,gc);
-		gc.gridx = 0;
-		gc.gridy += 1;
-		userInputPanel.add(customerStanding, gc);
+		userInputPanel.add(loanOfferID, gc);
+		gc.gridx = 1;
+		userInputPanel.add(loanOfferIDTextField, gc);
 		
 		//tablePanel
 		gc.gridx = 1;
@@ -150,14 +137,22 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		//button panel
 		buttonPanel.setBackground(new Color(200,50,200));
 		JButton createButton = new JButton();
+		JButton searchButton = new JButton();
+		searchButton.setText("Search");
 		createButton.setText("Create");
 		createButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new LoanOfferFrame();
+
 			}
 		});
+		gc.insets = new Insets(5,0,5,5);
+		gc.gridx = 0;
+		gc.gridy = 0;
+		buttonPanel.add(searchButton, gc);
+		gc.gridx +=1;
 		
 		buttonPanel.add(createButton, gc);
 		

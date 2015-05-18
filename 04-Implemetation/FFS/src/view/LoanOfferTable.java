@@ -51,7 +51,6 @@ public class LoanOfferTable extends AbstractTableModel{
 			return loanOfferList.get(rowIndex).getLoanSize();
 			
 		case 4:
-//			System.out.println(loanOfferList.get(rowIndex).getCustomer().getId() + loanOfferList.get(rowIndex).getCustomer().getFirstName());
 			return loanOfferList.get(rowIndex).getCustomer().getFirstName();
 			
 		case 5:

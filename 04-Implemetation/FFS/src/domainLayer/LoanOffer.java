@@ -15,7 +15,7 @@ public class LoanOffer {
 	private Customer customer;
 	private Car car;
 	private boolean approvedStatus;
-  private boolean rejected;
+    private boolean rejected;
 	
 	public boolean getApprovedStatus() {
     return approvedStatus;
