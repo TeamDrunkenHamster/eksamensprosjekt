@@ -87,7 +87,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       statement.execute();
       resultset = statement.getGeneratedKeys();
       if (resultset.next()){
-			return resultset.getInt(1);
+			return resultset.getInt("customerID");
 		}
       connection.commit();
       
