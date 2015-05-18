@@ -13,9 +13,5 @@ public interface LoanOfferReader {
 
 	public Customer readCustomer(String CPR);
 
-	public void addObserver(FFSObserver observer);
-
-	public void notifyObservers();
-
 	public List<Customer> readAllCustomers();
 }

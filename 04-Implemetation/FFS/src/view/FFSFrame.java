@@ -27,6 +27,7 @@ import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
+import logic.ObserverSingleton;
 import test.dummy.DummyObjects;
 
 @SuppressWarnings("serial")
@@ -43,8 +44,9 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		initTabs();
 		update();
 		databaseBuilder.createDatabase();
-		loanOG.addObserver(this);
-		loanOR.addObserver(this);
+//		loanOG.addObserver(this);
+//		loanOR.addObserver(this);
+		ObserverSingleton.instance().addObserver(this);
 	}
 
 	private void setTheme() {

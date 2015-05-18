@@ -36,7 +36,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private LoanOfferDAO loanOfferDAO;
 	private Connect connect;
 	private Connection connection;
-	private List<FFSObserver> observers = new ArrayList<>();
 	double bankRate;
 
 	public LoanOfferGeneratorImpl() {
@@ -122,7 +121,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		notifyObservers();
+		
+		ObserverSingleton.instance().notifyObservers();
 	}
 
 	private void calculateLoanOffer(double bankRate) {
@@ -156,7 +156,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			if (connection != null)
 				closeConnection();
 		}
-		notifyObservers();
+		ObserverSingleton.instance().notifyObservers();
 		return -1;
 	}
 
@@ -169,19 +169,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 	}
 
-	@Override
-	public void addObserver(FFSObserver observer) {
-
-		if (observer != null && !observers.contains(observer))
-			observers.add(observer);
-	}
-
-	@Override
-	public void notifyObservers() {
-
-		for (FFSObserver observer : observers)
-			observer.update();
-	}
 
 	private boolean getCustomerStanding(Connection connection, String CPR) {
 
