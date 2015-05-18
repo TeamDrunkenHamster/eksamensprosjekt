@@ -118,7 +118,6 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		JLabel customerStanding = new JLabel("Current standing ");
 		
 		
-		//input Panel
 		final int textFieldLength = 20;
 		JTextField customerCPRTextField = new JTextField(textFieldLength);
 		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
