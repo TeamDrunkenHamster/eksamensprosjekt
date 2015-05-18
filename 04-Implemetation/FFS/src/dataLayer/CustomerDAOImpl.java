@@ -32,6 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       while(resultSet.next()) {
         customer = new Customer();
         customer.setId(resultSet.getInt("customerID"));
+        customer.setCPR(resultSet.getString("cprNumber"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
         customer.setBadStanding(resultSet.getBoolean("badStanding"));
