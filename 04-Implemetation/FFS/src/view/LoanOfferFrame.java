@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -54,7 +55,7 @@ public class LoanOfferFrame extends JDialog {
 	private JTextField downPayment = new JTextField(TEXTFIELD_SIZE);
 	private JTextField totalInterestRate = new JTextField(TEXTFIELD_SIZE);
 	private JTextField apr = new JTextField(TEXTFIELD_SIZE);
-	private JTextField paymentPeriod = new JTextField(TEXTFIELD_SIZE);
+	private JTextField periodInMonths = new JTextField(TEXTFIELD_SIZE);
 	private JTextField startDate = new JTextField(TEXTFIELD_SIZE);
 	private JComboBox<String> approvalStatus = new JComboBox<String>();
 	private JTextField rejectionStatus = new JTextField(TEXTFIELD_SIZE);
@@ -68,7 +69,7 @@ public class LoanOfferFrame extends JDialog {
 	}
 
 	public LoanOfferFrame() {
-	
+		
 		createLabelList();
 		createInputFieldList();
 		setDefaultFrameSettings();
@@ -97,6 +98,7 @@ public class LoanOfferFrame extends JDialog {
 		apr.setEditable(false);
 		approvalStatus.setEditable(false);
 		rejectionStatus.setEditable(false);
+		btnExportToCSV.setEnabled(false);
 		
 	}
 
@@ -140,7 +142,7 @@ public class LoanOfferFrame extends JDialog {
 				downPayment,
 				totalInterestRate,
 				apr,
-				paymentPeriod,
+				periodInMonths,
 				startDate,
 				approvalStatus,
 				rejectionStatus));
@@ -216,10 +218,11 @@ public class LoanOfferFrame extends JDialog {
 		downPayment.setText(String.valueOf(loanOffer.getDownPayment()));
 		totalInterestRate.setText(String.valueOf(loanOffer.getTotalInterestRate()));
 		apr.setText(String.valueOf(loanOffer.getApr()));
-		paymentPeriod.setText(String.valueOf(loanOffer.getPaymentInMonths()));
+		periodInMonths.setText(String.valueOf(loanOffer.getPaymentInMonths()));
 		startDate.setText(loanOffer.getStartDate());
 		setApprovalStatus();
 		rejectionStatus.setText(String.valueOf(loanOffer.getRejected()));
+		btnExportToCSV.setEnabled(true);
 		
 	}
 	
@@ -297,9 +300,20 @@ public class LoanOfferFrame extends JDialog {
 		loanOffer.setLoanSize(Double.valueOf(loanSize.getText()));
 		loanOffer.setDownPayment(Double.valueOf(downPayment.getText()));
 		loanOffer.setStartDate(startDate.getText());
-		loanOffer.setPaymentInMonths(Integer.parseInt(paymentPeriod.getText()));
+		loanOffer.setPaymentInMonths(Integer.parseInt(periodInMonths.getText()));
 		
-		loanOG.createLoanOffer(loanOffer);
+		Thread loanOfferCreation = new Thread() {
+			
+			@Override
+			public void run() {
+				loanOG.createLoanOffer(loanOffer);
+			}
+		};
+		
+		loanOfferCreation.start();
+		JOptionPane.showMessageDialog(this, "Loan offer is being created." ,"Creating loan offer", JOptionPane.INFORMATION_MESSAGE);
+		this.dispose();
+		
 	}
 
 	private void btnCancelPressed() {
