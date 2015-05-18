@@ -64,47 +64,65 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
 		createConnection();
 
+		try {
+			Customer tempCustomer = customerDAO.readCustomer(connection, loanOffer.getCustomer().getCPR());
+			if (tempCustomer != null) {
+				System.out.println("if");
+				loanOffer.setCustomer(tempCustomer);
+			}
+			else {
+				System.out.println("else");
+				loanOffer.getCustomer().setId(customerDAO.createCustomer(connection, loanOffer.getCustomer()));
+			}
+		} catch (SQLException e) {
+		}
+		
 		this.customer = loanOffer.getCustomer();
-
+		System.out.println("customer: " + customer.getCPR());
+		System.out.println("loan: " + loanOffer.getCustomer().getCPR());
 		boolean badStanding = getCustomerStanding(connection,
-				customer.getCPR());
+				loanOffer.getCustomer().getCPR());
 
 		if (badStanding) {
 			rejectOffer();
 			return;
 		}
 
-		Thread bankRateThread = new Thread() {
+//		Thread bankRateThread = new Thread() {
+//
+//			@Override
+//			public void run() {
+//
+//				bankRate = InterestRate.i().todaysRate();
+//			}
+//		};
+//
+//		Thread creditRateThread = new Thread() {
+//
+//			@Override
+//			public void run() {
+//				System.out.println("T cpr: " + customer.getCPR());
+//				String creditRating = CreditRator.i().rate(customer.getCPR()).toString();
+//				System.out.println(creditRating);
+//				loanOffer.setCreditRating(creditRating);
+//			}
+//		};
+//
+//		bankRateThread.start();
+//		creditRateThread.start();
+//
+//		try {
+//			bankRateThread.join();
+//			creditRateThread.join();
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
 
-			@Override
-			public void run() {
-
-				bankRate = InterestRate.i().todaysRate();
-			}
-		};
-
-		Thread creditRateThread = new Thread() {
-
-			@Override
-			public void run() {
-
-				loanOffer.setCreditRating(CreditRator.i()
-						.rate(loanOffer.getCprNumber()).toString());
-			}
-		};
-
-		bankRateThread.start();
-		creditRateThread.start();
-
-		try {
-			bankRateThread.join();
-			creditRateThread.join();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-
+		System.out.println("1 " + loanOffer.getCreditRating());
 		calculateLoanOffer(bankRate);
 		try {
+			customer.setId(customerDAO.createCustomer(connection, customer));
+			salesmanDAO.createSalesman(connection, salesman);
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			e.printStackTrace();
