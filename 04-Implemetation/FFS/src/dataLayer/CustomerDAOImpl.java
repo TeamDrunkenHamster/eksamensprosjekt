@@ -85,11 +85,12 @@ public class CustomerDAOImpl implements CustomerDAO {
       statement.setString(2, customer.getLastName());
       statement.setBoolean(3, customer.getBadStanding());
       statement.execute();
+      connection.commit();
       resultset = statement.getGeneratedKeys();
       if (resultset.next()){
 			return resultset.getInt(1);
 		}
-      connection.commit();
+      
       
     } finally {
       if (statement != null)
