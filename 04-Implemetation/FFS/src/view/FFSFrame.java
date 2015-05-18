@@ -181,7 +181,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 				customer.setBadStanding(false);
 				car.setModel("F'ing smart");
 				car.setPrice(1000000.0);
-				loanOG.createCustomer(customer);
+				customer.setId(loanOG.createCustomer(customer));
 				
 				Connect connect = null;
 				try {
@@ -225,7 +225,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				update();
 			}
 		});
 		

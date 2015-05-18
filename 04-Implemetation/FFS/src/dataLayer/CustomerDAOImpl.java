@@ -90,8 +90,6 @@ public class CustomerDAOImpl implements CustomerDAO {
       if (resultset.next()){
 			return resultset.getInt(1);
 		}
-      
-      
     } finally {
       if (statement != null)
         statement.close();

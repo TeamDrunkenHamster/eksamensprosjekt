@@ -132,11 +132,11 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	}
 
 	@Override
-	public void createCustomer(Customer customer) {
+	public int createCustomer(Customer customer) {
 
 		createConnection();
 		try {
-			customerDAO.createCustomer(connection, customer);
+			return customerDAO.createCustomer(connection, customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -144,6 +144,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 				closeConnection();
 		}
 		notifyObservers();
+		return -1;
 	}
 
 	private void closeConnection() {
