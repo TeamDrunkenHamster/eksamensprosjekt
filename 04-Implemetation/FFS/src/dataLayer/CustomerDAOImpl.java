@@ -12,7 +12,7 @@ import domainLayer.Customer;
 public class CustomerDAOImpl implements CustomerDAO {
   
   private static final String SELECT_ALL = "SELECT * FROM Customer";
-  private static final String SELECT_FROM_CPR = "SELECT customerID, firstName, lastName, badStanding FROM Customer WHERE cprNumber = ?";
+  private static final String SELECT_FROM_CPR = "SELECT customerID, cprNumber, firstName, lastName, badStanding FROM Customer WHERE cprNumber = ?";
   private static final String CREATE = "INSERT INTO Customer (cprNumber, firstName, lastName, badStanding) VALUES (?, ?, ?, ?)";
   private static final String DELETE_FROM_ID = "DELETE FROM Customer WHERE customerID = ?";
   
@@ -61,6 +61,7 @@ public class CustomerDAOImpl implements CustomerDAO {
       
       while(resultSet.next()) {
         customer.setId(resultSet.getInt("customerID"));
+        customer.setCPR(resultSet.getString("cprNumber"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
         customer.setBadStanding(resultSet.getBoolean("badStanding"));
