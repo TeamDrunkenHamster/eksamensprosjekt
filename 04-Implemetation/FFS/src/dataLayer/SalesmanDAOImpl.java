@@ -9,8 +9,8 @@ import domainLayer.Salesman;
 
 public class SalesmanDAOImpl implements SalesmanDAO {
   
-  private static final String SELECT_FROM_ID = "SELECT salesmanID, firstName, lastName, loanValueLimit FROM Salesman WHERE salesmanID = ?";
-  private static final String CREATE = "INSERT INTO Salesman (firstName, lastName, loanValueLimit) VALUES (?, ?, ?)";
+  private static final String SELECT_FROM_ID = "SELECT salesmanID, loanValueLimit FROM Salesman WHERE salesmanID = ?";
+  private static final String CREATE = "INSERT INTO Salesman (loanValueLimit) VALUES (?)";
   
   
   public Salesman readSalesman( Connection connection, int salesmanID ) throws SQLException {
@@ -27,8 +27,6 @@ public class SalesmanDAOImpl implements SalesmanDAO {
       
       while(resultSet.next()) {
         salesman.setId(resultSet.getInt("customerID"));
-        salesman.setFirstName(resultSet.getString("firstName"));
-        salesman.setLastName(resultSet.getString("lastName"));
         salesman.setLoanValueLimit(resultSet.getInt("loanValueLimit"));
       }
     } finally {
@@ -46,9 +44,7 @@ public class SalesmanDAOImpl implements SalesmanDAO {
     
     try {
       statement = connection.prepareStatement( CREATE );
-      statement.setString(1, salesman.getFirstName());
-      statement.setString(2, salesman.getLastName());
-      statement.setInt(3, salesman.getLoanValueLimit());
+      statement.setInt(1, salesman.getLoanValueLimit());
       statement.execute();
       connection.commit();
       
