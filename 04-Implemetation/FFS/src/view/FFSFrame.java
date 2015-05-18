@@ -7,8 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,10 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableModel;
 
 import logic.DatabaseBuilder;
@@ -31,7 +29,18 @@ import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
+import dataLayer.CarDAO;
+import dataLayer.CarDAOImpl;
+import dataLayer.Connect;
+import dataLayer.ConnectImpl;
+import dataLayer.LoanOfferDAO;
+import dataLayer.LoanOfferDAOImpl;
+import dataLayer.SalesmanDAO;
+import dataLayer.SalesmanDAOImpl;
+import domainLayer.Car;
 import domainLayer.Customer;
+import domainLayer.LoanOffer;
+import domainLayer.Salesman;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -40,12 +49,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferGenerator loanOG = new LoanOfferGeneratorImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
-	private List<Customer> customerList = new ArrayList<>();
-	private CustomerTable customerTable = new CustomerTable();
-	private TableModel tableMoodel;
-	private JTable tEast = new JTable();
-	private JScrollPane spEast = new JScrollPane();
-
+	private TableModel loanOfferModel = new LoanOfferTable();
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
@@ -113,12 +117,14 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		JLabel customerLastName = new JLabel("Last name");
 		JLabel customerStanding = new JLabel("Current standing ");
 		
+		
+		//input Panel
 		final int textFieldLength = 20;
 		JTextField customerCPRTextField = new JTextField(textFieldLength);
 		JTextField customerFirstNameTextField = new JTextField(textFieldLength);
 		JTextField customerLastNameTextField = new JTextField(textFieldLength);
 		
-//		userInputPanel.setBackground(new Color(0,50,200));
+		userInputPanel.setBackground(new Color(0,50,200));
 		gc.gridx = 0;
 		gc.gridy = 0;
 		userInputPanel.add(customerCPR, gc);
@@ -138,14 +144,24 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		gc.gridy += 1;
 		userInputPanel.add(customerStanding, gc);
 		
+		//tablePanel
 		gc.gridx = 1;
 		gc.gridy = 0;	
 		tablePanel.setBackground(new Color(200,50,0));
 		gc.gridy +=1;
+		JScrollPane spEast = new JScrollPane();
+		JTable tEast = new JTable();
+		
+		
+		tEast.setModel(loanOfferModel);
+		spEast.setViewportView(tEast);
+		
+		tEast.setFillsViewportHeight(true);
+		//tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
 		tablePanel.add(spEast, gc);
 
 		//button panel
-//		buttonPanel.setBackground(new Color(200,50,200));
+		buttonPanel.setBackground(new Color(200,50,200));
 		JButton createButton = new JButton();
 		createButton.setText("Create");
 		createButton.addActionListener(new ActionListener() {
@@ -153,10 +169,63 @@ public class FFSFrame extends JFrame implements FFSObserver{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Customer customer = new Customer();
+				Car car = new Car();
+				Salesman salesman = new Salesman();
+				LoanOffer loanOffer = new LoanOffer();
+				
+				CarDAO carDAO = new CarDAOImpl();
+				SalesmanDAO salesmanDAO = new SalesmanDAOImpl();
+				
 				customer.setFirstName(customerFirstNameTextField.getText());
 				customer.setLastName(customerLastNameTextField.getText());
 				customer.setBadStanding(false);
+				car.setModel("F'ing smart");
+				car.setPrice(1000000.0);
 				loanOG.createCustomer(customer);
+				
+				Connect connect = null;
+				try {
+					connect = new ConnectImpl();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				Connection connection = connect.getConnection();
+				
+				try {
+					carDAO.createCar(connection, car);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				salesman.setLoanValueLimit(2000000);
+				
+				try {
+					salesmanDAO.createSalesman(connection, salesman);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				loanOffer.setCar(car);
+				loanOffer.setCustomer(customer);
+				loanOffer.setSalesman(salesman);
+				loanOffer.setApprovedStatus(true);
+				loanOffer.setDownPayment(500000);
+				loanOffer.setStartDate("dato");
+				loanOffer.setRejected(false);
+				loanOffer.setApr(10.5);
+				loanOffer.setTotalInterestRate(40.0);
+				loanOffer.setPaymentInMonths(40);
+				loanOffer.setCprNumber("1234567890");
+				loanOffer.setCreditRating("A");
+				loanOffer.setLoanSize(500000);
+				LoanOfferDAO lodao = new LoanOfferDAOImpl();
+				try {
+					lodao.createLoanOffer(connection, loanOffer);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		
@@ -167,33 +236,8 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		getContentPane().add(tabPane);
 	}
 
-	private void drawTable() {
-		tEast = setCustomerTable();
-		
-		tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tEast.setFillsViewportHeight(true);
-		spEast.setViewportView(tEast);
-	}			
-	
-	private JTable setCustomerTable() {
-
-		if (customerList.isEmpty()) {
-			String[] header = {"ID", "First Name", "Last Name", "Standing"};
-			String[][] data  = {};
-			tEast = new JTable(data, header);
-			return tEast;
-		}
-		else {
-			tEast = new JTable();
-			tableMoodel = customerTable.getCustomerTable(customerList);
-			tEast.setModel(tableMoodel);
-			return tEast;
-		}
-	}
-
 	@Override
 	public void update() {
-		customerList = loanOR.readAllCustomers();
-		drawTable();
+		((LoanOfferTable) loanOfferModel).updateTable();
 	}
 }

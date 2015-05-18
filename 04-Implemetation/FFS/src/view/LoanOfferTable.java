@@ -5,15 +5,23 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import logic.LoanOfferReader;
+import logic.LoanOfferReaderImpl;
 import domainLayer.LoanOffer;
 
+@SuppressWarnings("serial")
 public class LoanOfferTable extends AbstractTableModel{	
 	private String[] columnNames = { "Loan ID", "Salesman ID", "Status", "Loan size","First name", "Last name"};
-	private LoanOfferReader loanOR;
+	
+	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private List <LoanOffer> loanOfferList;
 	
 	LoanOfferTable(){
-		this.loanOfferList = loanOR.readAllLoanOffer();
+		loanOfferList = loanOR.readAllLoanOffers();
+	}
+	
+	@Override
+	public String getColumnName(int col) {
+		return columnNames[col].toString();
 	}
 	
 	@Override	
@@ -34,7 +42,7 @@ public class LoanOfferTable extends AbstractTableModel{
 			return loanOfferList.get(rowIndex).getLoanID();
 			
 		case 1:
-			return loanOfferList.get(rowIndex).getSalesman();
+			return loanOfferList.get(rowIndex).getSalesman().getId();
 		
 		case 2:			
 			return loanOfferList.get(rowIndex).getRejected();
@@ -43,6 +51,7 @@ public class LoanOfferTable extends AbstractTableModel{
 			return loanOfferList.get(rowIndex).getLoanSize();
 			
 		case 4:
+//			System.out.println(loanOfferList.get(rowIndex).getCustomer().getId() + loanOfferList.get(rowIndex).getCustomer().getFirstName());
 			return loanOfferList.get(rowIndex).getCustomer().getFirstName();
 			
 		case 5:
@@ -54,6 +63,7 @@ public class LoanOfferTable extends AbstractTableModel{
 	}
 	
 	public void updateTable(){
-		this.loanOfferList = loanOR.readAllLoanOffer();
+		loanOfferList = loanOR.readAllLoanOffers();
+		fireTableDataChanged();
 	}
 }

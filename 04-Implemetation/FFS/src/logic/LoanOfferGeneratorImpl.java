@@ -38,9 +38,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private Connection connection;
 	private List<FFSObserver> observers = new ArrayList<>();
 	double bankRate;
-	
+
 	public LoanOfferGeneratorImpl() {
-		
+
 		createConnection();
 		customerDAO = new CustomerDAOImpl();
 		loanOfferDAO = new LoanOfferDAOImpl();
@@ -50,7 +50,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	}
 
 	private void createConnection() {
-		
+
 		try {
 			connect = new ConnectImpl();
 			connection = connect.getConnection();
@@ -58,22 +58,22 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void createLoanOffer(LoanOffer loanOffer) {
-		
+
 		createConnection();
-		
-		
+
 		this.customer = loanOffer.getCustomer();
-		
-		boolean badStanding = getCustomerStanding(connection, customer.getCPR());
-		
+
+		boolean badStanding = getCustomerStanding(connection,
+				customer.getCPR());
+
 		if (badStanding) {
 			rejectOffer();
 			return;
 		}
-		
+
 		Thread bankRateThread = new Thread() {
 
 			@Override
@@ -82,39 +82,38 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 				bankRate = InterestRate.i().todaysRate();
 			}
 		};
-		
+
 		Thread creditRateThread = new Thread() {
 
 			@Override
 			public void run() {
 
-				loanOffer.setCreditRating(CreditRator.i().rate(loanOffer.getCprNumber()).toString());
+				loanOffer.setCreditRating(CreditRator.i()
+						.rate(loanOffer.getCprNumber()).toString());
 			}
 		};
-		
+
 		bankRateThread.start();
 		creditRateThread.start();
-		
+
 		try {
 			bankRateThread.join();
 			creditRateThread.join();
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		
-		
-		
+
 		calculateLoanOffer(bankRate);
 		try {
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void calculateLoanOffer(double bankRate) {
-		
+
 		double totalInterestRate = bankRate;
 		if (loanOffer.getCreditRating() == "A")
 			totalInterestRate += 1.0;
@@ -122,31 +121,29 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			totalInterestRate += 2.0;
 		else
 			totalInterestRate += 3.0;
-		
+
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
 
 	private void rejectOffer() {
-		
+
 		loanOffer.setRejected(true);
 		// setRandom = null?
 	}
 
 	@Override
-	public int createCustomer(Customer customer) {
-		
+	public void createCustomer(Customer customer) {
+
 		createConnection();
 		try {
-			return customerDAO.createCustomer(connection, customer);
+			customerDAO.createCustomer(connection, customer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			if (connection != null)
 				closeConnection();
 		}
-		
 		notifyObservers();
-		return -1;
 	}
 
 	private void closeConnection() {
@@ -161,7 +158,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	public void addObserver(FFSObserver observer) {
 
 		if (observer != null && !observers.contains(observer))
-            observers.add(observer);
+			observers.add(observer);
 	}
 
 	@Override
@@ -170,11 +167,12 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		for (FFSObserver observer : observers)
 			observer.update();
 	}
-	
-	private boolean getCustomerStanding(Connection connection, String CPR ){
-		
+
+	private boolean getCustomerStanding(Connection connection, String CPR) {
+
 		try {
-			return customerDAO.readCustomer(this.connection, CPR).getBadStanding();
+			return customerDAO.readCustomer(this.connection, CPR)
+					.getBadStanding();
 		} catch (SQLException e) {
 			return false;
 		}
