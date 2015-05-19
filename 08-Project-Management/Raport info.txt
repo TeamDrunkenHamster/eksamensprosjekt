@@ -1,0 +1,45 @@
+ 
+
+Formkrav til den skriftlige projektrapport
+
+Følgende elementer skal indgå
+
+• Forside med titel
+
+• Indholdsfortegnelse
+
+• Indledning, inkl. præsentation af problemstilling, problemformulering og tilgangsvinkler
+
+• Konklusion (husk, at der skal være sammenhæng mellem indledningen og konklusionen).
+
+De to skal i princippet kunne forstås uden at læse baggrunds-og analyseafsnittene)
+
+• Litteraturliste (inkl. alle kilder, der er lavet henvisninger til i projektet)
+
+• Bilag (inkluder kun bilag, som er centrale for rapporten)
+
+Projektet må maksimalt fylde 40 normalsider.
+
+En normalside er 2200 tegn inkl. mellemrum og fodnoter. Forside, indholdsfortegnelse,
+
+litteraturliste samt bilag tæller ikke med heri. Bilag er uden for bedømmelse.
+
+ 
+
+ 
+
+For at vise jeres (UP) proces kunne rapporten (baggrunds og analyseafsnittene) være opbygget med en overskrift pr. fase eller iteration, så den kan læses sekventielt.
+
+Fx
+
+-          Inception
+
+-          Elaboration
+
+-          Construction
+
+-          Transition
+
+ 
+
+Med eksempler på relevante artefakter i hvert afsnit (UML-modeller, mockups, screenshots, planer, osv). Gerne med delkonklusioner (gik det som planlagt, hvad gjorde I i stedet, osv.)
