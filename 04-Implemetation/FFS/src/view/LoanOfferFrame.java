@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -99,12 +101,13 @@ public class LoanOfferFrame extends JDialog {
 	}
 
 	private void disableIDFields() {
-		loanID.setEditable(false);
-		totalInterestRate.setEditable(false);
-		apr.setEditable(false);
-		approvalStatus.setEditable(false);
-		rejectionStatus.setEditable(false);
+		loanID.setEnabled(false);
+		totalInterestRate.setEnabled(false);
+		apr.setEnabled(false);
+		approvalStatus.setEnabled(false);
+		rejectionStatus.setEnabled(false);
 		btnExportToCSV.setEnabled(false);
+		loanSize.setEnabled(false);
 		
 	}
 
@@ -183,6 +186,7 @@ public class LoanOfferFrame extends JDialog {
 		for (Car car : carList) {
 			carModel.addItem(car.getModel());
 		}
+		
 	}
 
 	private void addDefaultPanels() {
