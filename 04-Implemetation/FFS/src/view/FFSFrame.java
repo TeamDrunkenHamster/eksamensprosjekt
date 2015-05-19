@@ -104,10 +104,12 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		//userinput panel
 		JLabel customerCPR = new JLabel("CPR");
 		JLabel loanOfferID = new JLabel("LoanID");
+		JLabel salesmanID = new JLabel("SalesmanID");
 		
 		final int textFieldLength = 20;
 		JTextField customerCPRTextField = new JTextField(textFieldLength);
 		JTextField loanOfferIDTextField = new JTextField(textFieldLength);
+		JTextField salesmanIDTextField = new JTextField(textFieldLength);
 		
 		userInputPanel.setBackground(new Color(0,50,200));
 		gc.gridx = 0;
@@ -120,7 +122,11 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		userInputPanel.add(loanOfferID, gc);
 		gc.gridx = 1;
 		userInputPanel.add(loanOfferIDTextField, gc);
-		
+		gc.gridx = 0;
+		gc.gridy += 1;
+		userInputPanel.add(salesmanID, gc);
+		gc.gridx = 1;
+		userInputPanel.add(salesmanIDTextField,gc);
 		//tablePanel
 		gc.gridx = 1;
 		gc.gridy = 0;	
