@@ -28,8 +28,6 @@ import domainLayer.LoanOffer;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
-import logic.LoanOfferGenerator;
-import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
 import logic.ObserverSingleton;
