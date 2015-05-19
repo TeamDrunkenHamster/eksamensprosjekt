@@ -34,7 +34,15 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	@Override
 	public LoanOffer readLoanOffer(int loanOfferID) {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			createConnection();
+			return loanOfferDAO.readLoanOffer(connection, loanOfferID);
+		} catch (SQLException e) {
+			return new LoanOffer(); 
+		} finally {
+			closeConnection();
+		}
+		
 	}
 	
 	@Override
