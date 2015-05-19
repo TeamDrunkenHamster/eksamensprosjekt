@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.TableModel;
 
 import logic.DatabaseBuilder;
@@ -28,7 +29,6 @@ import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
 import logic.ObserverSingleton;
-import test.dummy.DummyObjects;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -57,11 +57,12 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		            break;
 		        }
 		    }
-		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
-			// do something random.
-			throw new IndexOutOfBoundsException("Totalt relevant error!");
-		}		
+		} catch (ClassNotFoundException
+				| InstantiationException
+				| IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}	
 	}
 
 	private void setDefaultSettings() {
