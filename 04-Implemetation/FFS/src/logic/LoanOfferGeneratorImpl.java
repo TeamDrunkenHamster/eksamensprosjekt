@@ -146,7 +146,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //LoanSize er bilens pris minus udbetalingen.
 		loanOffer.setMontlyRepayment(loanOffer.getLoanSize()/loanOffer.getPaymentInMonths());
 		loanOffer.setMontlyRepaymentPlusInterest(loanOffer.getMontlyRepayment()+(loanOffer.getMontlyRepayment()*(totalInterestRate/100))); //Ydelse.
-		loanOffer.setApr((totalInterestRate/100)/(loanOffer.getPaymentInMonths()/40)); //Er ikke 100% paa at det her er rigtigt.
+		loanOffer.setApr((totalInterestRate/100)/(loanOffer.getPaymentInMonths()/12)); //Er ikke 100% paa at det her er rigtigt.
 		//Mangler vi mere? som fx totalsummen af ydelser eller andet
 
 		loanOffer.setTotalInterestRate(totalInterestRate);
