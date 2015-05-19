@@ -205,16 +205,37 @@ public class LoanOfferFrame extends JDialog {
 	private void addButtons() {
 		
 		btnExportToCSV = new JButton("Export to CSV");
-		btnSave = new JButton("OK");
+		btnSave = new JButton("Save");
 		btnCancel = new JButton("Cancel");
 		
 		buttonPanel.add(btnExportToCSV, gc);
 		buttonPanel.add(btnSave, gc);
 		buttonPanel.add(btnCancel, gc);
 		
-		btnExportToCSV.addActionListener(event -> btnExportPressed());
-		btnSave.addActionListener(event -> btnSavePressed());
-		btnCancel.addActionListener(event -> btnCancelPressed());
+		btnExportToCSV.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				btnExportPressed();
+			}
+		});
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				btnSavePressed();
+			}
+		});
+		btnCancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				btnCancelPressed();
+			}
+		});
 	}
 	
 	private void showLoanDetails() {
