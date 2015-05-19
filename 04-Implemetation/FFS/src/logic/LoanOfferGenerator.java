@@ -9,7 +9,5 @@ public interface LoanOfferGenerator {
 	
 	public int createCustomer(Customer customer);
 	
-	public void addObserver(FFSObserver observer);
-	
-	public void notifyObservers();
+
 }

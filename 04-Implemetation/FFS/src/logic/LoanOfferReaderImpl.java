@@ -22,7 +22,6 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	LoanOfferDAO loanOfferDAO;
 	Connect connect;
 	Connection connection;
-	List<FFSObserver> observers = new ArrayList<>();
 	
 	public LoanOfferReaderImpl() {
 		
@@ -102,22 +101,4 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 				e.printStackTrace();
 			}
 		}
-	 
-	@Override
-	public void addObserver(FFSObserver observer) {
-
-		if (observer != null && !observers.contains(observer))
-            observers.add(observer);
-	}
-
-	@Override
-	public void notifyObservers() {
-
-		for (FFSObserver observer : observers)
-			observer.update();
-	}
-
-
-
-	
 }

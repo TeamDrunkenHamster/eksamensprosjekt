@@ -36,7 +36,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private LoanOfferDAO loanOfferDAO;
 	private Connect connect;
 	private Connection connection;
-	private List<FFSObserver> observers = new ArrayList<>();
 	double bankRate;
 
 	public LoanOfferGeneratorImpl() {
@@ -63,71 +62,67 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	public void createLoanOffer(LoanOffer loanOffer) {
 
 		createConnection();
-
+		
 		try {
 			Customer tempCustomer = customerDAO.readCustomer(connection, loanOffer.getCustomer().getCPR());
-			if (tempCustomer != null) {
-				System.out.println("if");
+			if (tempCustomer.getCPR() != null) {
 				loanOffer.setCustomer(tempCustomer);
 			}
 			else {
-				System.out.println("else");
 				loanOffer.getCustomer().setId(customerDAO.createCustomer(connection, loanOffer.getCustomer()));
 			}
 		} catch (SQLException e) {
 		}
 		
 		this.customer = loanOffer.getCustomer();
-		System.out.println("customer: " + customer.getCPR());
-		System.out.println("loan: " + loanOffer.getCustomer().getCPR());
-		boolean badStanding = getCustomerStanding(connection,
-				loanOffer.getCustomer().getCPR());
+		this.salesman = loanOffer.getSalesman();
+		this.salesman.setLoanValueLimit(1000000);
+		
+		boolean badStanding = getCustomerStanding(connection, loanOffer.getCustomer().getCPR());
 
 		if (badStanding) {
 			rejectOffer();
 			return;
 		}
 
-//		Thread bankRateThread = new Thread() {
-//
-//			@Override
-//			public void run() {
-//
-//				bankRate = InterestRate.i().todaysRate();
-//			}
-//		};
-//
-//		Thread creditRateThread = new Thread() {
-//
-//			@Override
-//			public void run() {
-//				System.out.println("T cpr: " + customer.getCPR());
-//				String creditRating = CreditRator.i().rate(customer.getCPR()).toString();
-//				System.out.println(creditRating);
-//				loanOffer.setCreditRating(creditRating);
-//			}
-//		};
-//
-//		bankRateThread.start();
-//		creditRateThread.start();
-//
-//		try {
-//			bankRateThread.join();
-//			creditRateThread.join();
-//		} catch (InterruptedException e1) {
-//			e1.printStackTrace();
-//		}
+		Thread bankRateThread = new Thread() {
 
-		System.out.println("1 " + loanOffer.getCreditRating());
-		calculateLoanOffer(bankRate);
+			@Override
+			public void run() {
+
+				bankRate = InterestRate.i().todaysRate();
+			}
+		};
+
+		Thread creditRateThread = new Thread() {
+
+			@Override
+			public void run() {
+				String creditRating = CreditRator.i().rate(customer.getCPR()).toString();
+				loanOffer.setCreditRating(creditRating);
+			}
+		};
+
+		bankRateThread.start();
+		creditRateThread.start();
+
 		try {
-			customer.setId(customerDAO.createCustomer(connection, customer));
+			bankRateThread.join();
+			creditRateThread.join();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+//		calculateLoanOffer(bankRate);
+		try {
+			
 			salesmanDAO.createSalesman(connection, salesman);
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
+		ObserverSingleton.instance().notifyObservers();
 	}
 
 	private void calculateLoanOffer(double bankRate) {
@@ -139,6 +134,20 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			totalInterestRate += 2.0;
 		else
 			totalInterestRate += 3.0;
+		
+		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
+		  totalInterestRate += 1.0;
+		else if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) //Hvis udbetalen er mindre end 20% af bilens pris, afvis tilbud.
+		  rejectOffer();
+		
+		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
+		  totalInterestRate += 1.0;
+		
+		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //LoanSize er bilens pris minus udbetalingen.
+		loanOffer.setMontlyRepayment(loanOffer.getLoanSize()/loanOffer.getPaymentInMonths());
+		loanOffer.setMontlyRepaymentPlusInterest(loanOffer.getMontlyRepayment()+(loanOffer.getMontlyRepayment()*(totalInterestRate/100))); //Ydelse.
+		loanOffer.setApr((totalInterestRate/100)/(loanOffer.getPaymentInMonths()/40)); //Er ikke 100% paa at det her er rigtigt.
+		//Mangler vi mere? som fx totalsummen af ydelser eller andet
 
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
@@ -161,11 +170,12 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			if (connection != null)
 				closeConnection();
 		}
-		notifyObservers();
+		ObserverSingleton.instance().notifyObservers();
 		return -1;
 	}
 
 	private void closeConnection() {
+		
 		try {
 			connection.close();
 		} catch (SQLException e) {
@@ -173,19 +183,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 	}
 
-	@Override
-	public void addObserver(FFSObserver observer) {
-
-		if (observer != null && !observers.contains(observer))
-			observers.add(observer);
-	}
-
-	@Override
-	public void notifyObservers() {
-
-		for (FFSObserver observer : observers)
-			observer.update();
-	}
 
 	private boolean getCustomerStanding(Connection connection, String CPR) {
 
