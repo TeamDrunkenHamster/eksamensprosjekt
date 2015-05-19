@@ -20,11 +20,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import logic.LoanOfferGenerator;
+import logic.LoanOfferGeneratorImpl;
 import dataLayer.CarDAO;
 import dataLayer.CarDAOImpl;
 import dataLayer.ConnectImpl;
 import domainLayer.Car;
+import domainLayer.Customer;
 import domainLayer.LoanOffer;
+import domainLayer.Salesman;
 
 public class LoanOfferFrame extends JDialog {
 	
@@ -36,7 +40,7 @@ public class LoanOfferFrame extends JDialog {
 	private JPanel buttonPanel;
 	private JButton btnExportToCSV;
 	private JButton btnCancel;
-	private JButton btnOK;
+	private JButton btnSave;
 	private GridBagConstraints gc;
 	private List<String> labelText;
 	private List<Object> inputFields;
@@ -187,15 +191,15 @@ public class LoanOfferFrame extends JDialog {
 	private void addButtons() {
 		
 		btnExportToCSV = new JButton("Export to CSV");
-		btnOK = new JButton("OK");
+		btnSave = new JButton("OK");
 		btnCancel = new JButton("Cancel");
 		
 		buttonPanel.add(btnExportToCSV, gc);
-		buttonPanel.add(btnOK, gc);
+		buttonPanel.add(btnSave, gc);
 		buttonPanel.add(btnCancel, gc);
 		
 		btnExportToCSV.addActionListener(event -> btnExportPressed());
-		btnOK.addActionListener(event -> btnOKPressed());
+		btnSave.addActionListener(event -> btnSavePressed());
 		btnCancel.addActionListener(event -> btnCancelPressed());
 	}
 	
@@ -272,7 +276,30 @@ public class LoanOfferFrame extends JDialog {
 		gc.gridy += 1;
 	}
 	
-	private void btnOKPressed() {
+	private void btnSavePressed() {
+		
+		Customer customer = new Customer();
+		Salesman salesman = new Salesman();
+		Car car = new Car();
+		LoanOffer loanOffer = new LoanOffer();
+		LoanOfferGenerator loanOG = new LoanOfferGeneratorImpl();
+		
+		customer.setCPR(cpr.getText());
+		customer.setFirstName(firstName.getText());
+		customer.setLastName(lastName.getText());
+		salesman.setId(Integer.parseInt(salesmanID.getText()));
+		car.setModel(carModel.getSelectedItem().toString());
+		
+
+		loanOffer.setCustomer(customer);
+		loanOffer.setSalesman(salesman);
+		loanOffer.setCar(car);
+		loanOffer.setLoanSize(Double.valueOf(loanSize.getText()));
+		loanOffer.setDownPayment(Double.valueOf(downPayment.getText()));
+		loanOffer.setStartDate(startDate.getText());
+		loanOffer.setPaymentInMonths(Integer.parseInt(paymentPeriod.getText()));
+		
+		loanOG.createLoanOffer(loanOffer);
 	}
 
 	private void btnCancelPressed() {
