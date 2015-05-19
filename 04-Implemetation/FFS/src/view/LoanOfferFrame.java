@@ -8,18 +8,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -357,9 +357,15 @@ public class LoanOfferFrame extends JDialog {
 
 	private void btnExportPressed() {
 		
-		csv = new CsvImpl();
-		csv.exportToCSV(loanOffer, "C:\\Users\\TomC\\Documents\\test.csv");
-		JOptionPane.showMessageDialog(this, "Loan offer has been exported." ,"Export to CSV", JOptionPane.INFORMATION_MESSAGE);
+		JFileChooser fc = new JFileChooser();
+		int returnValue = fc.showOpenDialog(this);
+		 
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            csv = new CsvImpl();
+            csv.exportToCSV(loanOffer, file.getPath());
+            JOptionPane.showMessageDialog(this, "Loan offer has been exported." ,"Export to CSV", JOptionPane.INFORMATION_MESSAGE);
+        }
 	}
 	
 	private JLabel createDefaultLabel(String text) {
