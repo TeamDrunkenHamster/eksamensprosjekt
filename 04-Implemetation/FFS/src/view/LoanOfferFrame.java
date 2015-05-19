@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,6 +41,7 @@ public class LoanOfferFrame extends JDialog {
 	private Connection connection;
 	private LoanOffer loanOffer;
 	private Csv csv;
+	private List<Car> carList;
 	private JPanel basePanel;
 	private JPanel loanInformationPanel;
 	private JPanel buttonPanel;
@@ -176,8 +179,10 @@ public class LoanOfferFrame extends JDialog {
 	
 	private void addCarsToComboBox() {
 		
-		for (Car car : getCompleteCarList())
+		carList = getCompleteCarList();
+		for (Car car : carList) {
 			carModel.addItem(car.getModel());
+		}
 	}
 
 	private void addDefaultPanels() {
@@ -211,10 +216,10 @@ public class LoanOfferFrame extends JDialog {
 	private void showLoanDetails() {
 		
 		loanID.setText(String.valueOf(loanOffer.getLoanID()));
-		cpr.setText(loanOffer.getCprNumber());
+		cpr.setText(loanOffer.getCustomer().getCPR());
 		firstName.setText(loanOffer.getCustomer().getFirstName());
 		lastName.setText(loanOffer.getCustomer().getLastName());
-		salesmanID.setText(String.valueOf(loanOffer.getSalesman().getSalesmanID()));
+		salesmanID.setText(String.valueOf(loanOffer.getSalesman().getId()));
 		carModel.removeAllItems();
 		carModel.addItem(loanOffer.getCar().getModel());
 		loanSize.setText(String.valueOf(loanOffer.getLoanSize()));
@@ -295,7 +300,8 @@ public class LoanOfferFrame extends JDialog {
 		customer.setLastName(lastName.getText());
 		salesman.setId(Integer.parseInt(salesmanID.getText()));
 		car.setModel(carModel.getSelectedItem().toString());
-		
+		car.setPrice(carList.get(carModel.getSelectedIndex()).getPrice());
+		car.setId(carList.get(carModel.getSelectedIndex()).getId());
 
 		loanOffer.setCustomer(customer);
 		loanOffer.setSalesman(salesman);

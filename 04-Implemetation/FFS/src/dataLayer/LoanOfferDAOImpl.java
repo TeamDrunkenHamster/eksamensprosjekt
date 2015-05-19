@@ -14,10 +14,10 @@ import domainLayer.Salesman;
 
 public class LoanOfferDAOImpl implements LoanOfferDAO {
   
-  private static final String SELECT_ALL = "SELECT Customer.customerID, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
+  private static final String SELECT_ALL = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
       "LEFT JOIN Customer ON LoanOffer.customerID=Customer.customerID LEFT JOIN Salesman ON LoanOffer.salesmanID=Salesman.salesmanID LEFT JOIN Car ON LoanOffer.carID=Car.carID";
 
-  private static final String SELECT_FROM_ID = "SELECT Customer.customerID, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
+  private static final String SELECT_FROM_ID = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
                                              "LEFT JOIN Customer ON LoanOffer.customerID=Customer.customerID LEFT JOIN Salesman ON LoanOffer.salesmanID=Salesman.salesmanID LEFT JOIN Car ON LoanOffer.carID=Car.carID WHERE LoanID = ?";
   
   private static final String CREATE = "INSERT INTO LoanOffer (customerID, salesmanID, carID, totalInterestRate, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -45,6 +45,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
         loanOffer = new LoanOffer();
         
         customer.setId(resultSet.getInt("customerID"));
+        customer.setCPR(resultSet.getString("cprNumber"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
         loanOffer.setCustomer(customer);
@@ -93,6 +94,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
         loanOffer = new LoanOffer();
         
         customer.setId(resultSet.getInt("customerID"));
+        customer.setCPR(resultSet.getString("cprNumber"));
         customer.setFirstName(resultSet.getString("firstName"));
         customer.setLastName(resultSet.getString("lastName"));
         loanOffer.setCustomer(customer);

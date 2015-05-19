@@ -25,7 +25,6 @@ import domainLayer.Salesman;
 
 public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
-	private API api;
 	private LoanOffer loanOffer;
 	private Customer customer;
 	private Car car;
@@ -45,7 +44,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		loanOfferDAO = new LoanOfferDAOImpl();
 		salesmanDAO = new SalesmanDAOImpl();
 		carDAO = new CarDAOImpl();
-		api = new APIImpl();
 	}
 
 	private void createConnection() {
@@ -61,6 +59,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	@Override
 	public void createLoanOffer(LoanOffer loanOffer) {
 
+		
 		createConnection();
 		
 		try {
@@ -110,18 +109,20 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			bankRateThread.join();
 			creditRateThread.join();
 		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+			System.out.println("crap");
 		}
-
-//		calculateLoanOffer(bankRate);
+		
+		this.loanOffer = loanOffer;
+		
+		calculateLoanOffer(bankRate);
 		try {
 			
 			salesmanDAO.createSalesman(connection, salesman);
-			loanOfferDAO.createLoanOffer(connection, loanOffer);
+			loanOfferDAO.createLoanOffer(connection, this.loanOffer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		closeConnection();
 		ObserverSingleton.instance().notifyObservers();
 	}
 
@@ -156,22 +157,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
 		loanOffer.setRejected(true);
 		// setRandom = null?
-	}
-
-	@Override
-	public int createCustomer(Customer customer) {
-
-		createConnection();
-		try {
-			return customerDAO.createCustomer(connection, customer);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if (connection != null)
-				closeConnection();
-		}
-		ObserverSingleton.instance().notifyObservers();
-		return -1;
 	}
 
 	private void closeConnection() {
