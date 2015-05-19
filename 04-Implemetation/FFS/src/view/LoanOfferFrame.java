@@ -21,6 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import logic.Csv;
+import logic.CsvImpl;
 import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import dataLayer.CarDAO;
@@ -36,6 +38,7 @@ public class LoanOfferFrame extends JDialog {
 	private static final int TEXTFIELD_SIZE = 20;
 	private Connection connection;
 	private LoanOffer loanOffer;
+	private Csv csv;
 	private JPanel basePanel;
 	private JPanel loanInformationPanel;
 	private JPanel buttonPanel;
@@ -322,6 +325,10 @@ public class LoanOfferFrame extends JDialog {
 	}
 
 	private void btnExportPressed() {
+		
+		csv = new CsvImpl();
+		csv.exportToCSV(loanOffer, "C:\\Users\\TomC\\Documents\\test.csv");
+		JOptionPane.showMessageDialog(this, "Loan offer has been exported." ,"Export to CSV", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	private JLabel createDefaultLabel(String text) {
