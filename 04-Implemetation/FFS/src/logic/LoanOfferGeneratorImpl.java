@@ -121,6 +121,20 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			totalInterestRate += 2.0;
 		else
 			totalInterestRate += 3.0;
+		
+		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
+		  totalInterestRate += 1.0;
+		else if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) //Hvis udbetalen er mindre end 20% af bilens pris, afvis tilbud.
+		  rejectOffer();
+		
+		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
+		  totalInterestRate += 1.0;
+		
+		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //LoanSize er bilens pris minus udbetalingen.
+		loanOffer.setMontlyRepayment(loanOffer.getLoanSize()/loanOffer.getPaymentInMonths());
+		loanOffer.setMontlyRepaymentPlusInterest(loanOffer.getMontlyRepayment()+(loanOffer.getMontlyRepayment()*(totalInterestRate/100))); //Ydelse.
+		loanOffer.setApr((totalInterestRate/100)/(loanOffer.getPaymentInMonths()/40)); //Er ikke 100% paa at det her er rigtigt.
+		//Mangler vi mere? som fx totalsummen af ydelser eller andet
 
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}

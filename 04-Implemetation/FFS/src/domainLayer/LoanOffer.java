@@ -5,7 +5,9 @@ public class LoanOffer {
 	private int loanID;
 	private int paymentInMonths;
 	private double totalInterestRate;
-	private String startDate;
+	private double montlyRepayment;
+	private double montlyRepaymentPlusInterest; //=ydelse. Ved ikke hvad vi skal kalde den.
+  private String startDate;
 	private double downPayment;
 	private double loanSize;
 	private double apr;
@@ -16,8 +18,24 @@ public class LoanOffer {
 	private Car car;
 	private boolean approvedStatus;
   private boolean rejected;
+  
+  public double getMontlyRepayment() {
+    return montlyRepayment;
+  }
+
+  public void setMontlyRepayment( double montlyRepayment ) {
+    this.montlyRepayment = montlyRepayment;
+  }
 	
-	public boolean getApprovedStatus() {
+	public double getMontlyRepaymentPlusInterest() {
+    return montlyRepaymentPlusInterest;
+  }
+
+  public void setMontlyRepaymentPlusInterest( double montlyRepaymentPlusInterest ) {
+    this.montlyRepaymentPlusInterest = montlyRepaymentPlusInterest;
+  }
+
+  public boolean getApprovedStatus() {
     return approvedStatus;
   }
 
