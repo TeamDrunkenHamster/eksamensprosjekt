@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,10 +18,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.table.TableModel;
 
+import domainLayer.LoanOffer;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
@@ -27,7 +31,6 @@ import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
-import test.dummy.DummyObjects;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -135,9 +138,21 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		
 		tEast.setModel(loanOfferModel);
 		spEast.setViewportView(tEast);
-		
 		tEast.setFillsViewportHeight(true);
-		//tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
+		tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tEast.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e){
+				if(e.getClickCount() == 2){
+					JTable target = (JTable)e.getSource();
+					LoanOffer clickedLoanOffer = new LoanOffer();
+					int row = target.getSelectedRow();
+					int clickedLoanID = (int) target.getValueAt(row, 0);
+					clickedLoanOffer = loanOR.readLoanOffer(clickedLoanID);
+					new LoanOfferFrame(clickedLoanOffer);
+				}
+			}
+		});
+
 		tablePanel.add(spEast, gc);
 
 		//button panel
