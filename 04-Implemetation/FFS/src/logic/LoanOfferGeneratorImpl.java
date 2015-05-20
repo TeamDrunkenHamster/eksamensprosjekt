@@ -74,8 +74,11 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 		
 		this.customer = loanOffer.getCustomer();
-		this.salesman = loanOffer.getSalesman();
-		this.salesman.setLoanValueLimit(1000000);
+		try {
+			this.salesman = salesmanDAO.readSalesman(connection, loanOffer.getSalesman().getId());
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
 		
 		boolean badStanding = getCustomerStanding(connection, loanOffer.getCustomer().getCPR());
 

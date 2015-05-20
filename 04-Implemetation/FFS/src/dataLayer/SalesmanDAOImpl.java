@@ -29,7 +29,7 @@ public class SalesmanDAOImpl implements SalesmanDAO {
       salesman = new Salesman();
       
       while(resultSet.next()) {
-        salesman.setId(resultSet.getInt("customerID"));
+        salesman.setId(resultSet.getInt("salesmanID"));
         salesman.setLoanValueLimit(resultSet.getInt("loanValueLimit"));
       }
     } finally {
