@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 
 import logic.Csv;
 import logic.CsvImpl;
+import logic.CsvPaymentPlanImpl;
 import logic.LoanOfferGenerator;
 import logic.LoanOfferGeneratorImpl;
 import dataLayer.CarDAO;
@@ -364,6 +365,8 @@ public class LoanOfferFrame extends JDialog {
             File file = fc.getSelectedFile();
             csv = new CsvImpl();
             csv.exportToCSV(loanOffer, file.getPath());
+            csv = new CsvPaymentPlanImpl();
+            csv.exportToCSV(loanOffer, file.getPath().replace(".csv", "-payment_plan.csv"));
             JOptionPane.showMessageDialog(this, "Loan offer has been exported." ,"Export to CSV", JOptionPane.INFORMATION_MESSAGE);
         }
 	}
