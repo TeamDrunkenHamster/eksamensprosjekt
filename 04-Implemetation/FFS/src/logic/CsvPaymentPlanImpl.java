@@ -63,11 +63,11 @@ public class CsvPaymentPlanImpl implements Csv {
     csvString.append(DELIMITER);
     csvString.append(loanOffer.getCar().getPrice());
     csvString.append(DELIMITER);
-    csvString.append(loanOffer.getLoanSize());
+    csvString.append(String.valueOf(loanOffer.getLoanSize()));
     csvString.append(DELIMITER);
     csvString.append(String.valueOf(loanOffer.getTotalInterestRate()));
     csvString.append(DELIMITER);
-    csvString.append(loanOffer.getPaymentInMonths());
+    csvString.append(String.valueOf(loanOffer.getPaymentInMonths()));
     csvString.append(DELIMITER);
     csvString.append(loanOffer.getMontlyRepaymentPlusInterest());
     csvString.append(DELIMITER);
