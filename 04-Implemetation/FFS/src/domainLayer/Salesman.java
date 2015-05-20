@@ -14,8 +14,8 @@ public class Salesman extends Person {
   public int getLoanValueLimit() {
     return loanValueLimit;
   }
-  public void setLoanValueLimit( int loamValueLimit ) {
-    this.loanValueLimit = loamValueLimit;
+  public void setLoanValueLimit( int loanValueLimit ) {
+    this.loanValueLimit = loanValueLimit;
   }
 
 }
