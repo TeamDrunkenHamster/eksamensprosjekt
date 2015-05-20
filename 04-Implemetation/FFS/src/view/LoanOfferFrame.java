@@ -359,10 +359,13 @@ public class LoanOfferFrame extends JDialog {
 	private void btnExportPressed() {
 		
 		JFileChooser fc = new JFileChooser();
-		int returnValue = fc.showOpenDialog(this);
+		int returnValue = fc.showSaveDialog(this);
 		 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
+            if (!file.getPath().substring(file.getPath().length()-4, file.getPath().length()).equals(".csv"))
+            	file = new File(file.getPath() + ".csv");
+            
             csv = new CsvImpl();
             csv.exportToCSV(loanOffer, file.getPath());
             csv = new CsvPaymentPlanImpl();
