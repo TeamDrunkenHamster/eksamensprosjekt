@@ -331,7 +331,7 @@ public class LoanOfferFrame extends JDialog {
 		loanOffer.setCustomer(customer);
 		loanOffer.setSalesman(salesman);
 		loanOffer.setCar(car);
-		loanOffer.setLoanSize(Double.valueOf(loanSize.getText()));
+//		loanOffer.setLoanSize(Double.valueOf(loanSize.getText()));
 		loanOffer.setDownPayment(Double.valueOf(downPayment.getText()));
 		loanOffer.setStartDate(startDate.getText());
 		loanOffer.setPaymentInMonths(Integer.parseInt(periodInMonths.getText()));

@@ -57,9 +57,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	}
 
 	@Override
-	public void createLoanOffer(LoanOffer loanOffer) {
+	public void createLoanOffer(LoanOffer inputLoanOffer) {
 
-		
+		this.loanOffer = inputLoanOffer;
 		createConnection();
 		
 		try {
@@ -98,13 +98,13 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			System.out.println("crap");
 		}
 		
-		this.loanOffer = loanOffer;
+		
 		
 		calculateLoanOffer(bankRate);
 		try {
 			
 			salesmanDAO.createSalesman(connection, salesman);
-			loanOfferDAO.createLoanOffer(connection, this.loanOffer);
+			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
