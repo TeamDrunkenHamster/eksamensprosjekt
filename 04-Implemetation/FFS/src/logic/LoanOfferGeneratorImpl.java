@@ -84,23 +84,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			return;
 		}
 
-		Thread bankRateThread = new Thread() {
+		Thread bankRateThread = getInterestRate();
 
-			@Override
-			public void run() {
-
-				bankRate = InterestRate.i().todaysRate();
-			}
-		};
-
-		Thread creditRateThread = new Thread() {
-
-			@Override
-			public void run() {
-				String creditRating = CreditRator.i().rate(customer.getCPR()).toString();
-				loanOffer.setCreditRating(creditRating);
-			}
-		};
+		Thread creditRateThread = getCreditRate(loanOffer.getCustomer().getCPR());
 
 		bankRateThread.start();
 		creditRateThread.start();
@@ -124,6 +110,30 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 		closeConnection();
 		ObserverSingleton.instance().notifyObservers();
+	}
+
+	private Thread getInterestRate() {
+		Thread bankRateThread = new Thread() {
+
+			@Override
+			public void run() {
+
+				bankRate = InterestRate.i().todaysRate();
+			}
+		};
+		return bankRateThread;
+	}
+
+	private Thread getCreditRate(String cpr) {
+		Thread creditRateThread = new Thread() {
+
+			@Override
+			public void run() {
+				String creditRating = CreditRator.i().rate(cpr).toString();
+				loanOffer.setCreditRating(creditRating);
+			}
+		};
+		return creditRateThread;
 	}
 
 	private void calculateLoanOffer(double bankRate) {
