@@ -11,7 +11,7 @@ public class CsvImpl implements Csv {
 	private static final String DELIMITER = ",";
 	private static final String NEWLINE = "\n";
 	private static final String HEADERS = "LoanID,CPRNumber,CustomerFirstName,CustomerLastName,"
-			+ "SalesmanID,CarModel,Downpayment,TotalInterestRate,APR,PaymentInMonths,StartDate,"
+			+ "SalesmanID,CarModel,LoanSize,Downpayment,TotalInterestRate,APR,PaymentInMonths,StartDate,"
 			+ "ApprovalStatus,RejectedStatus";
 
 	@Override
@@ -42,7 +42,7 @@ public class CsvImpl implements Csv {
 		csvString.append(DELIMITER);
 		csvString.append(loanOffer.getSalesman().getId());
 		csvString.append(DELIMITER);
-		csvString.append(loanOffer.getSalesman().getId());
+		csvString.append(loanOffer.getCar().getModel());
 		csvString.append(DELIMITER);
 		csvString.append(loanOffer.getLoanSize());
 		csvString.append(DELIMITER);
