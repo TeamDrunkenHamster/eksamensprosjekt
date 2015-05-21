@@ -101,11 +101,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			System.out.println("crap");
 		}
 		
-		
-		
 		calculateLoanOffer(bankRate);
+		
 		try {
-			
 			salesmanDAO.createSalesman(connection, salesman);
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
@@ -151,7 +149,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
 		  totalInterestRate += 1.0;
-		else if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) //Hvis udbetalen er mindre end 20% af bilens pris, afvis tilbud.
+		
+		if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) //Hvis udbetalen er mindre end 20% af bilens pris, afvis tilbud.
 		  rejectOffer();
 		
 		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
