@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import logging.ErrorTypes;
+import logging.Logger;
 import domainLayer.LoanOffer;
 
 public class CsvImpl implements Csv {
@@ -13,7 +15,8 @@ public class CsvImpl implements Csv {
 	private static final String HEADERS = "LoanID,CPRNumber,CustomerFirstName,CustomerLastName,"
 			+ "SalesmanID,CarModel,LoanSize,Downpayment,TotalInterestRate,APR,PaymentInMonths,StartDate,"
 			+ "ApprovalStatus,RejectedStatus";
-
+	private Logger logger = new Logger();
+	
 	@Override
 	public void exportToCSV(LoanOffer loanOffer, String path) {
 
@@ -24,7 +27,7 @@ public class CsvImpl implements Csv {
 			buffer.write(formattedCustomer(loanOffer));
 			buffer.close();
 		} catch (IOException e) {
-			System.out.println("crap");
+			logger.log("IO Error", "Error writing csv file." + "\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 	}
 	

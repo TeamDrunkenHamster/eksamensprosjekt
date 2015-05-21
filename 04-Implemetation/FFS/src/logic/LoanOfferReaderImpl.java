@@ -3,10 +3,11 @@ package logic;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import logging.ErrorTypes;
+import logging.Logger;
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
@@ -18,10 +19,11 @@ import domainLayer.LoanOffer;
 
 public class LoanOfferReaderImpl implements LoanOfferReader {
 
-	CustomerDAO customerDAO;
-	LoanOfferDAO loanOfferDAO;
-	Connect connect;
-	Connection connection;
+	private CustomerDAO customerDAO;
+	private LoanOfferDAO loanOfferDAO;
+	private Connect connect;
+	private Connection connection;
+	private Logger logger = new Logger();
 	
 	public LoanOfferReaderImpl() {
 		
@@ -37,7 +39,8 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			createConnection();
 			return loanOfferDAO.readLoanOffer(connection, loanOfferID);
 		} catch (SQLException e) {
-			return new LoanOffer(); 
+			logger.log("Database error", "Error retrieving loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
+			return new LoanOffer();
 		} finally {
 			closeConnection();
 		}
@@ -51,7 +54,8 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			createConnection();
 			return loanOfferDAO.readAllLoanOffers(connection);
 		} catch (SQLException e) {
-			return Collections.<LoanOffer>emptyList();
+			logger.log("Database error", "Error retrieving loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
+			return Collections.emptyList();
 		} finally {
 			closeConnection();
 		}
@@ -64,10 +68,12 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			createConnection();
 			return customerDAO.readCustomer(connection, CPR);
 		} catch (SQLException e) {
+			logger.log("Database error", "Error retrieving customer.\n" + e.getMessage(), ErrorTypes.ERROR);
 			return new Customer();
 		} finally {
 			closeConnection();
 		}
+		
 	}
 	
 	 @Override
@@ -79,10 +85,12 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	      createConnection();
 	      return customerDAO.readAllCustomers(connection);
 	    } catch (SQLException e) {
-	      return customerList = new ArrayList<Customer>();
+	    	logger.log("Database error", "Error retrieving customers.\n" + e.getMessage(), ErrorTypes.ERROR);
+	    	return Collections.emptyList();
 	    } finally {
 	      closeConnection();
 	    }
+	    
 	  }
 	 
 	 private void createConnection() {
@@ -90,7 +98,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 				connect = new ConnectImpl();
 				connection = connect.getConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.log("Database error", "Error creating connection.\n" + e.getMessage(), ErrorTypes.ERROR);
 			}
 		}
 
@@ -98,7 +106,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.log("Database error", "Error closing connection.\n" + e.getMessage(), ErrorTypes.ERROR);
 			}
 		}
 }

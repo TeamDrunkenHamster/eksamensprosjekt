@@ -2,8 +2,9 @@ package logic;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
+import logging.ErrorTypes;
+import logging.Logger;
 
 import com.ferrari.finances.dk.bank.InterestRate;
 import com.ferrari.finances.dk.rki.CreditRator;
@@ -35,7 +36,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private LoanOfferDAO loanOfferDAO;
 	private Connect connect;
 	private Connection connection;
-	double bankRate;
+	private double bankRate;
+	private Logger logger = new Logger();
 
 	public LoanOfferGeneratorImpl() {
 
@@ -52,7 +54,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			connect = new ConnectImpl();
 			connection = connect.getConnection();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log("Connection error", "Error while connecting to database.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 	}
 
@@ -71,13 +73,14 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 				loanOffer.getCustomer().setId(customerDAO.createCustomer(connection, loanOffer.getCustomer()));
 			}
 		} catch (SQLException e) {
+			logger.log("Database error", "Error while inspecting customer.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 		
 		this.customer = loanOffer.getCustomer();
 		try {
 			this.salesman = salesmanDAO.readSalesman(connection, loanOffer.getSalesman().getId());
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			logger.log("Database error", "Error while getting salesman.\n" + e2.getMessage(), ErrorTypes.ERROR);
 		}
 		
 		boolean badStanding = getCustomerStanding(connection, loanOffer.getCustomer().getCPR());
@@ -98,18 +101,17 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			bankRateThread.join();
 			creditRateThread.join();
 		} catch (InterruptedException e1) {
-			System.out.println("crap");
+			logger.log("Threading error", "Bank or RKI connection has been interrupted.\n" + e1.getMessage(), ErrorTypes.ERROR);
 		}
 		
 		
 		
 		calculateLoanOffer(bankRate);
 		try {
-			
 			salesmanDAO.createSalesman(connection, salesman);
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log("Database error", "Error while creating loan offer.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 		closeConnection();
 		ObserverSingleton.instance().notifyObservers();
@@ -177,7 +179,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log("Database error", "Error closing connection to database.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 	}
 

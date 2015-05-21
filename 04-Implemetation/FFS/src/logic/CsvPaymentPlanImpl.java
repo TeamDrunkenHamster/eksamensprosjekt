@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import logging.ErrorTypes;
+import logging.Logger;
 import domainLayer.LoanOffer;
 
 public class CsvPaymentPlanImpl implements Csv {
@@ -16,6 +18,7 @@ public class CsvPaymentPlanImpl implements Csv {
   private static final String DELIMITER = ",";
   private static final String NEWLINE = "\n";
   private static final String HEADERS = "LoanID,CarPrice,LoanSize,InterestRate,PaymentPeriod,MonthlyPaymentWithInterest,StartDate,";
+  private Logger logger = new Logger();
 
   @Override
   public void exportToCSV(LoanOffer loanOffer, String path) {
@@ -27,7 +30,7 @@ public class CsvPaymentPlanImpl implements Csv {
       buffer.write(formattedPaymentPlan(loanOffer));
       buffer.close();
     } catch (IOException e) {
-      System.out.println("shit");
+    	logger.log("IO Error", "Error writing csv payment plan file." + "\n" + e.getMessage(), ErrorTypes.ERROR);
     }
   }
   
@@ -42,7 +45,7 @@ public class CsvPaymentPlanImpl implements Csv {
         date = simpleDateFormat.parse(dateAsString);
         cal.setTime(date);   
     } catch (ParseException e) { 
-        System.out.println("Error using: " + simpleDateFormat); 
+    	logger.log("Date format error", "Error using: " + simpleDateFormat, ErrorTypes.ERROR);
     }
     
     StringBuilder paymentPlanHeaders = new StringBuilder();

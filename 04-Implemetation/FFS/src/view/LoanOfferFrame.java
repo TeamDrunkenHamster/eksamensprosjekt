@@ -21,10 +21,12 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import logging.ErrorTypes;
+import logging.LogContainer;
+import logging.Logger;
 import logic.Csv;
 import logic.CsvImpl;
 import logic.CsvPaymentPlanImpl;
@@ -40,7 +42,15 @@ import domainLayer.Salesman;
 
 public class LoanOfferFrame extends JDialog {
 	
+	private static final String CAR_IMPORT_ERROR_MSG = "Error importing cars from database.";
+	private static final String DATABASE_ERROR_TITLE = "Database error";
+	private static final String DATABASE_CLOSING_ERROR_MSG = "Error closing connection to database.";
+	private static final String LOAN_OFFER_CREATION_TITLE = "Creating loan offer";
+	private static final String LOAN_OFFER_CREATION_MSG = "Loan offer is being created.";
+	private static final String EXPORT_TO_CSV_TITLE = "Export to CSV";
+	private static final String EXPORT_TO_CSV_MSG = "Loan offer has been exported.";
 	private static final int TEXTFIELD_SIZE = 20;
+	private Logger logger = new Logger();
 	private Connection connection;
 	private LoanOffer loanOffer;
 	private Csv csv;
@@ -205,7 +215,7 @@ public class LoanOfferFrame extends JDialog {
 
 	private void addButtons() {
 		
-		btnExportToCSV = new JButton("Export to CSV");
+		btnExportToCSV = new JButton(EXPORT_TO_CSV_TITLE);
 		btnSave = new JButton("Save");
 		btnCancel = new JButton("Cancel");
 		
@@ -279,7 +289,7 @@ public class LoanOfferFrame extends JDialog {
 			CarDAO carDAO = new CarDAOImpl();
 			return carDAO.readAllCars(connection);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(DATABASE_ERROR_TITLE, CAR_IMPORT_ERROR_MSG + "\n" + e.getMessage(), ErrorTypes.ERROR);
 		} finally {
 			closeConnection();
 		}
@@ -292,7 +302,7 @@ public class LoanOfferFrame extends JDialog {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.log(DATABASE_ERROR_TITLE, DATABASE_CLOSING_ERROR_MSG + "\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 	}
 	
@@ -346,7 +356,7 @@ public class LoanOfferFrame extends JDialog {
 		};
 		
 		loanOfferCreation.start();
-		JOptionPane.showMessageDialog(this, "Loan offer is being created." ,"Creating loan offer", JOptionPane.INFORMATION_MESSAGE);
+		logger.log(LOAN_OFFER_CREATION_TITLE, LOAN_OFFER_CREATION_MSG, ErrorTypes.INFORMATION);
 		this.dispose();
 		
 	}
@@ -370,7 +380,7 @@ public class LoanOfferFrame extends JDialog {
             csv.exportToCSV(loanOffer, file.getPath());
             csv = new CsvPaymentPlanImpl();
             csv.exportToCSV(loanOffer, file.getPath().replace(".csv", "-payment_plan.csv"));
-            JOptionPane.showMessageDialog(this, "Loan offer has been exported." ,"Export to CSV", JOptionPane.INFORMATION_MESSAGE);
+            logger.log(EXPORT_TO_CSV_TITLE, EXPORT_TO_CSV_MSG, ErrorTypes.INFORMATION);
         }
 	}
 	

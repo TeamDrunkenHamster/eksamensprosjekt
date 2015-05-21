@@ -3,12 +3,16 @@ package logic;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import logging.ErrorTypes;
+import logging.Logger;
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.DatabaseSetup;
 import dataLayer.DatabaseSetupImpl;
 
 public class DatabaseBuilderImpl implements DatabaseBuilder {
+	
+	private Logger logger = new Logger();
 	
 	@Override
 	public void createDatabase() {
@@ -20,7 +24,7 @@ public class DatabaseBuilderImpl implements DatabaseBuilder {
 			dbSetup.createDatabase(connection);
 			connection.close();
 		} catch (SQLException e) {
-			System.out.println("database error!");
+			logger.log("Database error", "Error setting up database for first time use.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
 	}
 

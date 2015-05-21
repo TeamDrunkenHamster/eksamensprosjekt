@@ -9,10 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 
+import javax.lang.model.type.ErrorType;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -24,13 +27,17 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.TableModel;
 
-import domainLayer.LoanOffer;
+import logging.ErrorTypes;
+import logging.LogContainer;
+import logging.LogObject;
+import logging.Logger;
 import logic.DatabaseBuilder;
 import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
 import logic.ObserverSingleton;
+import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
@@ -39,6 +46,8 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private TableModel loanOfferModel = new LoanOfferTable();
+	private Logger logger = new Logger();
+	
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
@@ -60,7 +69,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 				| InstantiationException
 				| IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+			logger.log("Theme error", "Error setting Nimbus theme.", ErrorTypes.ERROR);
 		}	
 	}
 
@@ -184,5 +193,15 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	@Override
 	public void update() {
 		((LoanOfferTable) loanOfferModel).updateTable();
+		Collection<LogObject> log = logger.getLog();
+		if (!log.isEmpty()) {
+			for (LogObject entry : log) {
+				if (entry.getErrorType().equals(ErrorTypes.ERROR))
+					JOptionPane.showMessageDialog(this, entry.getMessage() , entry.getTitle(), JOptionPane.ERROR_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(this, entry.getMessage() , entry.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+				logger.clearLog();
+			}
+		}
 	}
 }
