@@ -3,8 +3,6 @@ package logging;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import logic.ObserverSingleton;
-
 
 public class LogContainer {
 

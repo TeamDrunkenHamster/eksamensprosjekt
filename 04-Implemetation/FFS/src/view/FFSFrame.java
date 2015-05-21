@@ -11,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 
-import javax.lang.model.type.ErrorType;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,10 +24,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.TableModel;
 
 import logging.ErrorTypes;
-import logging.LogContainer;
 import logging.LogObject;
 import logging.Logger;
 import logic.DatabaseBuilder;
@@ -45,7 +42,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private JTabbedPane tabPane = new JTabbedPane();
 	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
-	private TableModel loanOfferModel = new LoanOfferTable();
+	private LoanOfferTable loanOfferModel = new LoanOfferTable();
 	private Logger logger = new Logger();
 	
 	public FFSFrame(){
@@ -140,15 +137,15 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		gc.gridy = 0;	
 		tablePanel.setBackground(new Color(200,50,0));
 		gc.gridy +=1;
-		JScrollPane spEast = new JScrollPane();
-		JTable tEast = new JTable();
+		JScrollPane scrollpaneTablePane = new JScrollPane();
+		JTable tableTablePane = new JTable();
 		
 		
-		tEast.setModel(loanOfferModel);
-		spEast.setViewportView(tEast);
-		tEast.setFillsViewportHeight(true);
-		tEast.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tEast.addMouseListener(new MouseAdapter() {
+		tableTablePane.setModel(loanOfferModel);
+		scrollpaneTablePane.setViewportView(tableTablePane);
+		tableTablePane.setFillsViewportHeight(true);
+		tableTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableTablePane.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e){
 				if(e.getClickCount() == 2){
 					JTable target = (JTable)e.getSource();
@@ -161,7 +158,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 			}
 		});
 
-		tablePanel.add(spEast, gc);
+		tablePanel.add(scrollpaneTablePane, gc);
 
 		//button panel
 		buttonPanel.setBackground(new Color(200,50,200));
@@ -192,7 +189,7 @@ public class FFSFrame extends JFrame implements FFSObserver{
 
 	@Override
 	public void update() {
-		((LoanOfferTable) loanOfferModel).updateTable();
+		loanOfferModel.updateTable();
 		Collection<LogObject> log = logger.getLog();
 		if (!log.isEmpty()) {
 			for (LogObject entry : log) {
@@ -200,8 +197,8 @@ public class FFSFrame extends JFrame implements FFSObserver{
 					JOptionPane.showMessageDialog(this, entry.getMessage() , entry.getTitle(), JOptionPane.ERROR_MESSAGE);
 				else
 					JOptionPane.showMessageDialog(this, entry.getMessage() , entry.getTitle(), JOptionPane.INFORMATION_MESSAGE);
-				logger.clearLog();
 			}
+			logger.clearLog();
 		}
 	}
 }
