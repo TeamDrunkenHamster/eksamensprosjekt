@@ -23,6 +23,7 @@ public class DatabaseBuilderImpl implements DatabaseBuilder {
 			DatabaseSetup dbSetup = new DatabaseSetupImpl();
 			dbSetup.createDatabase(connection);
 			connection.close();
+			ObserverSingleton.instance().notifyObservers();
 		} catch (SQLException e) {
 			logger.log("Database error", "Error setting up database for first time use.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}

@@ -46,11 +46,10 @@ public class FFSFrame extends JFrame implements FFSObserver{
 	private Logger logger = new Logger();
 	
 	public FFSFrame(){
+		databaseBuilder.createDatabase();
 		setTheme();
 		setDefaultSettings();
 		initTabs();
-		update();
-		databaseBuilder.createDatabase();
 		ObserverSingleton.instance().addObserver(this);
 	}
 

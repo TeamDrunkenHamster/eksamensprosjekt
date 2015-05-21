@@ -25,5 +25,6 @@ public class Logger {
 	
 	public void clearLog() {
 		
+		LogContainer.instance().clearLog();
 	}
 }

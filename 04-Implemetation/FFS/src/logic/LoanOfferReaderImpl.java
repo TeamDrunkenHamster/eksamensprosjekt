@@ -54,7 +54,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			createConnection();
 			return loanOfferDAO.readAllLoanOffers(connection);
 		} catch (SQLException e) {
-			logger.log("Database error", "Error retrieving loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
+			logger.log("Database error", "Error retrieving all loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
 			return Collections.emptyList();
 		} finally {
 			closeConnection();
