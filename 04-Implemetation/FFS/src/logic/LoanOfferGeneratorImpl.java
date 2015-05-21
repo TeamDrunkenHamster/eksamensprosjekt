@@ -104,7 +104,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			logger.log("Threading error", "Bank or RKI connection has been interrupted.\n" + e1.getMessage(), ErrorTypes.ERROR);
 		}
 		
-		calculateLoanOffer(bankRate);
+		calculateInterestRate(bankRate);
 		
 		try {
 			salesmanDAO.createSalesman(connection, salesman);
@@ -140,7 +140,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		return creditRateThread;
 	}
 
-	private void calculateLoanOffer(double bankRate) {
+	private void calculateInterestRate(double bankRate) {
 
 		double totalInterestRate = bankRate;
 		if (loanOffer.getCreditRating() == "A")
@@ -158,12 +158,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
 		  totalInterestRate += 1.0;
-		
-		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //LoanSize er bilens pris minus udbetalingen.
-		loanOffer.setMontlyRepayment(loanOffer.getLoanSize()/loanOffer.getPaymentInMonths());
-		loanOffer.setMontlyRepaymentPlusInterest(loanOffer.getMontlyRepayment()+(loanOffer.getMontlyRepayment()*(totalInterestRate/100))); //Ydelse.
-		loanOffer.setApr((totalInterestRate/100)/(loanOffer.getPaymentInMonths()/12)); //Er ikke 100% paa at det her er rigtigt.
-		//Mangler vi mere? som fx totalsummen af ydelser eller andet
 
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
