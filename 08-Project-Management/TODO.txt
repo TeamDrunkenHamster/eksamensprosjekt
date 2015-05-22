@@ -1,0 +1,7 @@
+Marting og Jeppe;	indledning til raport ++
+xxx;	kalkulering af apr
+xxx;	prosjektplan
+xxx;	review af csv plan
+Tom;	flytte kalkuering til egen klasse
+
+poopolishing
