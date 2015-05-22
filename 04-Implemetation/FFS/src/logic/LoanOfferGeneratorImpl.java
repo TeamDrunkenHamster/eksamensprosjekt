@@ -61,6 +61,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	@Override
 	public void createLoanOffer(LoanOffer inputLoanOffer) {
 
+		boolean salesmanExists = false;
 		this.loanOffer = inputLoanOffer;
 		createConnection();
 		
@@ -79,6 +80,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		this.customer = loanOffer.getCustomer();
 		try {
 			this.salesman = salesmanDAO.readSalesman(connection, loanOffer.getSalesman().getId());
+			salesmanExists = true;
 		} catch (SQLException e2) {
 			logger.log("Database error", "Error while getting salesman.\n" + e2.getMessage(), ErrorTypes.ERROR);
 		}
@@ -106,8 +108,13 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		
 		calculateInterestRate(bankRate);
 		
+		if (loanOffer.getLoanSize() < salesman.getLoanValueLimit())
+			loanOffer.setApprovedStatus(true);
+		
+		
 		try {
-			salesmanDAO.createSalesman(connection, salesman);
+			if (!salesmanExists)
+				salesmanDAO.createSalesman(connection, salesman);
 			loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			logger.log("Database error", "Error while creating loan offer.\n" + e.getMessage(), ErrorTypes.ERROR);
