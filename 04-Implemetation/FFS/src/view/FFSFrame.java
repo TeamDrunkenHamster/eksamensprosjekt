@@ -40,13 +40,11 @@ import domainLayer.LoanOffer;
 public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
-	private DatabaseBuilder databaseBuilder = new DatabaseBuilderImpl();
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private LoanOfferTable loanOfferModel = new LoanOfferTable();
 	private Logger logger = new Logger();
 	
 	public FFSFrame(){
-		databaseBuilder.createDatabase();
 		setTheme();
 		setDefaultSettings();
 		initTabs();
