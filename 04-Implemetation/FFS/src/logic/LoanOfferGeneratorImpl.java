@@ -86,18 +86,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			return;
 		}
 
-		
-
-		Thread creditRateThread = getCreditRate(loanOffer.getCustomer().getCPR());
-
-		creditRateThread.start();
-
-		try {
-			creditRateThread.join();
-		} catch (InterruptedException e1) {
-			logger.log("Threading error", "RKI connection has been interrupted.\n" + e1.getMessage(), ErrorTypes.ERROR);
-		}
-		
 		Calculator calc = new CalculatorImpl();
 		loanOffer = calc.calculate(loanOffer);
 		
@@ -117,17 +105,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		ObserverSingleton.instance().notifyObservers();
 	}
 
-	private Thread getCreditRate(String cpr) {
-		Thread creditRateThread = new Thread() {
-
-			@Override
-			public void run() {
-				String creditRating = CreditRator.i().rate(cpr).toString();
-				loanOffer.setCreditRating(creditRating);
-			}
-		};
-		return creditRateThread;
-	}
 
 	private void rejectOffer() {
 

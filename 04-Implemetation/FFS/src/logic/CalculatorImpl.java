@@ -4,6 +4,7 @@ import logging.ErrorTypes;
 import logging.Logger;
 
 import com.ferrari.finances.dk.bank.InterestRate;
+import com.ferrari.finances.dk.rki.CreditRator;
 
 import domainLayer.LoanOffer;
 
@@ -18,11 +19,14 @@ public class CalculatorImpl implements Calculator {
 		
 		this.loanOffer = inputLoanOffer;
 		Thread bankRateThread = getInterestRate();
+		Thread creditRateThread = getCreditRate(loanOffer.getCustomer().getCPR());
 		bankRateThread.start();
+		creditRateThread.start();
 		try {
 			bankRateThread.join();
+			creditRateThread.join();
 		} catch (InterruptedException e) {
-			logger.log("Threading error", "Connection to bank failed.", ErrorTypes.ERROR);
+			logger.log("Threading error", "Connection to bank or RKI failed.", ErrorTypes.ERROR);
 		}
 		loanOffer.setTotalInterestRate(bankRate);
 		calculateTotalInterestRate();
@@ -82,6 +86,18 @@ public class CalculatorImpl implements Calculator {
 			}
 		};
 		return bankRateThread;
+	}
+	
+	private Thread getCreditRate(String cpr) {
+		Thread creditRateThread = new Thread() {
+
+			@Override
+			public void run() {
+				String creditRating = CreditRator.i().rate(cpr).toString();
+				loanOffer.setCreditRating(creditRating);
+			}
+		};
+		return creditRateThread;
 	}
 
 	@Override
