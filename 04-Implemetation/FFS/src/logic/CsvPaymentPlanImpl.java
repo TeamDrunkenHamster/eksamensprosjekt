@@ -17,7 +17,7 @@ public class CsvPaymentPlanImpl implements Csv {
   
   private static final String DELIMITER = ",";
   private static final String NEWLINE = "\n";
-  private static final String HEADERS = "Termin,Dato,Ydelse,Rente,Afdrag,Rest";
+  private static final String HEADERS = "Termin,Ydelse,Rente,Afdrag,Rest,Dato";
   private Logger logger = new Logger();
 
   @Override
