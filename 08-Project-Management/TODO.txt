@@ -4,7 +4,7 @@ Tom;	done		kalkulering af apr
 Jeppe og Martin;	prosjektplan
 Martin;			review af csv plan
 Tom;	done		flytte kalkuering til egen klasse
-Tom;			error ved oppretting af ny loan offer i tom database
+Tom;	done		error ved oppretting af ny loan offer i tom database
 Martin;			refaktorisering af gui
 
 poopolishing
