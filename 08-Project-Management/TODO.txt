@@ -1,10 +1,10 @@
 
 Martin og Jeppe;	indledning til raport ++
-Tom;			kalkulering af apr
+Tom;	done		kalkulering af apr
 Jeppe og Martin;	prosjektplan
 Martin;			review af csv plan
-Tom;			flytte kalkuering til egen klasse
-xxx;			error ved oppretting af ny loan offer i tom database
+Tom;	done		flytte kalkuering til egen klasse
+Tom;			error ved oppretting af ny loan offer i tom database
 Martin;			refaktorisering af gui
 
 poopolishing
