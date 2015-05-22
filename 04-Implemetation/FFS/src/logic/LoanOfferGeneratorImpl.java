@@ -104,8 +104,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 		
 		calculateTotalInterestRate(bankRate);
-		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //loanOffer mangler en bil tror jeg
-		loanOffer.setMontlyPayment(calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
+		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment());
+		loanOffer.setMonthlyPayment(calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
 		
 		if (loanOffer.getLoanSize() < salesman.getLoanValueLimit())
 			loanOffer.setApprovedStatus(true);
@@ -168,7 +168,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
 	
-	public double calculateMonthlyPayment(double loanAmount, int termInMonths, double interestRate) {
+	private double calculateMonthlyPayment(double loanAmount, int termInMonths, double interestRate) {
 		// Convert interest rate into a decimal
 		// eg. 6.5% = 0.065
 		interestRate /= 100.0;

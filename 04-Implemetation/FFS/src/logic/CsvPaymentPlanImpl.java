@@ -50,9 +50,8 @@ public class CsvPaymentPlanImpl implements Csv {
     }
     
     int termin = 0;
-    loanOffer.setMontlyPayment(new LoanOfferGeneratorImpl().calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
-                            //dumt men det var loesningen lige nu. vi burde tilfoeje ydelse til loanOffer table i databasen?
-    double ydelse = loanOffer.getMontlyPayment();
+    boolean ydelsesInstantiator = true; 
+    double ydelse = 0;
     double rente = 0;
     double afdrag = 0;
     double rest = loanOffer.getLoanSize();
@@ -71,12 +70,18 @@ public class CsvPaymentPlanImpl implements Csv {
       csvString.append(DELIMITER);
       csvString.append(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1));
       csvString.append(NEWLINE);
+
       
+      while(ydelsesInstantiator){
+        ydelse = loanOffer.getMonthlyPayment();
+        ydelsesInstantiator = false;
+      }
       rente = rest*(rentesats/100)/12;
       afdrag = ydelse-rente;
       rest -= afdrag;
       termin++;
       calendar.add(Calendar.MONTH, 1);
+
     }
     
     return csvString.toString();

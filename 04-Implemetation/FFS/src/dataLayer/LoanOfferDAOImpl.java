@@ -14,13 +14,13 @@ import domainLayer.Salesman;
 
 public class LoanOfferDAOImpl implements LoanOfferDAO {
   
-  private static final String SELECT_ALL = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, apr, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
+  private static final String SELECT_ALL = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, monthlyPayment, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
       "LEFT JOIN Customer ON LoanOffer.customerID=Customer.customerID LEFT JOIN Salesman ON LoanOffer.salesmanID=Salesman.salesmanID LEFT JOIN Car ON LoanOffer.carID=Car.carID";
 
-  private static final String SELECT_FROM_ID = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, apr, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
+  private static final String SELECT_FROM_ID = "SELECT Customer.customerID, Customer.cprNumber, Customer.firstName, Customer.lastName, Salesman.salesmanID, Car.model, Car.carID, loanID, totalInterestRate, monthlyPayment, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus, rejected FROM LoanOffer " + 
                                              "LEFT JOIN Customer ON LoanOffer.customerID=Customer.customerID LEFT JOIN Salesman ON LoanOffer.salesmanID=Salesman.salesmanID LEFT JOIN Car ON LoanOffer.carID=Car.carID WHERE LoanID = ?";
   
-  private static final String CREATE = "INSERT INTO LoanOffer (customerID, salesmanID, carID, totalInterestRate, apr, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  private static final String CREATE = "INSERT INTO LoanOffer (customerID, salesmanID, carID, totalInterestRate, monthlyPayment, downPayment, loanSize, paymentPeriodInMonths, startDate, approvedStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                                         //Skal loanOffers creates med approvedStatus på false? og hvad med rejected?
 
   public List<LoanOffer> readAllLoanOffers(Connection connection) throws SQLException {
@@ -56,7 +56,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
         loanOffer.setCar(car);
         loanOffer.setLoanID(resultSet.getInt("loanID"));
         loanOffer.setTotalInterestRate(resultSet.getDouble("totalInterestRate"));
-        loanOffer.setApr(resultSet.getDouble("apr"));
+        loanOffer.setMonthlyPayment(resultSet.getDouble("monthlyPayment"));
         loanOffer.setDownPayment(resultSet.getDouble("downPayment"));
         loanOffer.setLoanSize(resultSet.getDouble("loanSize"));
         loanOffer.setPaymentInMonths(resultSet.getInt("paymentPeriodInMonths"));
@@ -106,7 +106,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
         loanOffer.setCar(car);
         loanOffer.setLoanID(resultSet.getInt("loanID"));
         loanOffer.setTotalInterestRate(resultSet.getDouble("totalInterestRate"));
-        loanOffer.setApr(resultSet.getDouble("apr"));
+        loanOffer.setMonthlyPayment(resultSet.getDouble("monthlyPayment"));
         loanOffer.setDownPayment(resultSet.getDouble("downPayment"));
         loanOffer.setLoanSize(resultSet.getDouble("loanSize"));
         loanOffer.setPaymentInMonths(resultSet.getInt("paymentPeriodInMonths"));
@@ -134,7 +134,7 @@ public class LoanOfferDAOImpl implements LoanOfferDAO {
       statement.setInt(2, loanOffer.getSalesman().getId());
       statement.setInt(3, loanOffer.getCar().getId());
       statement.setDouble(4, loanOffer.getTotalInterestRate());
-      statement.setDouble(5, loanOffer.getApr());
+      statement.setDouble(5, loanOffer.getMonthlyPayment());
       statement.setDouble(6, loanOffer.getDownPayment());
       statement.setDouble(7, loanOffer.getLoanSize());
       statement.setInt(8, loanOffer.getPaymentInMonths());
