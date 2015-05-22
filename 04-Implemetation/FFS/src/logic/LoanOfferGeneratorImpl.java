@@ -9,8 +9,6 @@ import logging.Logger;
 import com.ferrari.finances.dk.bank.InterestRate;
 import com.ferrari.finances.dk.rki.CreditRator;
 
-import dataLayer.CarDAO;
-import dataLayer.CarDAOImpl;
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
@@ -19,7 +17,6 @@ import dataLayer.LoanOfferDAO;
 import dataLayer.LoanOfferDAOImpl;
 import dataLayer.SalesmanDAO;
 import dataLayer.SalesmanDAOImpl;
-import domainLayer.Car;
 import domainLayer.Customer;
 import domainLayer.LoanOffer;
 import domainLayer.Salesman;
