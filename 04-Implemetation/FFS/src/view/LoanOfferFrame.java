@@ -379,7 +379,7 @@ public class LoanOfferFrame extends JDialog {
             csv = new CsvImpl();
             csv.exportToCSV(loanOffer, file.getPath());
             csv = new CsvPaymentPlanImpl();
-            csv.exportToCSV(loanOffer, file.getPath().replace(".csv", "-payment_plan.csv"));
+            csv.exportToCSV(loanOffer, file.getPath().replace(".csv", "-" + loanOffer.getLoanID() + "-payment_plan.csv"));
             logger.log(EXPORT_TO_CSV_TITLE, EXPORT_TO_CSV_MSG, ErrorTypes.INFORMATION);
         }
 	}

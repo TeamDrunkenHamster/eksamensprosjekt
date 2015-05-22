@@ -28,10 +28,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 
 	private LoanOffer loanOffer;
 	private Customer customer;
-	private Car car;
 	private Salesman salesman;
 	private CustomerDAO customerDAO;
-	private CarDAO carDAO;
 	private SalesmanDAO salesmanDAO;
 	private LoanOfferDAO loanOfferDAO;
 	private Connect connect;
@@ -45,7 +43,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		customerDAO = new CustomerDAOImpl();
 		loanOfferDAO = new LoanOfferDAOImpl();
 		salesmanDAO = new SalesmanDAOImpl();
-		carDAO = new CarDAOImpl();
 	}
 
 	private void createConnection() {
@@ -106,7 +103,9 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 			logger.log("Threading error", "Bank or RKI connection has been interrupted.\n" + e1.getMessage(), ErrorTypes.ERROR);
 		}
 		
-		calculateInterestRate(bankRate);
+		calculateTotalInterestRate(bankRate);
+		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment()); //loanOffer mangler en bil tror jeg
+		loanOffer.setMontlyPayment(calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
 		
 		if (loanOffer.getLoanSize() < salesman.getLoanValueLimit())
 			loanOffer.setApprovedStatus(true);
@@ -147,7 +146,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		return creditRateThread;
 	}
 
-	private void calculateInterestRate(double bankRate) {
+	private void calculateTotalInterestRate(double bankRate) {
 
 		double totalInterestRate = bankRate;
 		if (loanOffer.getCreditRating() == "A")
@@ -169,7 +168,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		loanOffer.setTotalInterestRate(totalInterestRate);
 	}
 	
-	private static double calculateMonthlyPayment(int loanAmount, int termInYears, double interestRate) {
+	public double calculateMonthlyPayment(double loanAmount, int termInMonths, double interestRate) {
 		// Convert interest rate into a decimal
 		// eg. 6.5% = 0.065
 		interestRate /= 100.0;
@@ -178,14 +177,13 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		double monthlyRate = interestRate / 12.0;
 		// The length of the term in months
 		// is the number of years times 12
-		int termInMonths = termInYears * 12;
+		//int termInMonths = termInYears * 12;
 		// Calculate the monthly payment
 		// Typically this formula is provided so
 		// we won't go into the details
 		// The Math.pow() method is used calculate values raised to a power
 		double monthlyPayment = (loanAmount * monthlyRate)
 				/ (1 - Math.pow(1 + monthlyRate, -termInMonths));
-
 		return monthlyPayment;
 	}
 

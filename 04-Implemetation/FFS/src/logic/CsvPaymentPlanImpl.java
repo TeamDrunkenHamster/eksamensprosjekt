@@ -17,7 +17,7 @@ public class CsvPaymentPlanImpl implements Csv {
   
   private static final String DELIMITER = ",";
   private static final String NEWLINE = "\n";
-  private static final String HEADERS = "LoanID,CarPrice,LoanSize,InterestRate,PaymentPeriod,MonthlyPaymentWithInterest,StartDate,";
+  private static final String HEADERS = "Termin,Dato,Ydelse,Rente,Afdrag,Rest";
   private Logger logger = new Logger();
 
   @Override
@@ -25,7 +25,7 @@ public class CsvPaymentPlanImpl implements Csv {
 
     try {
       BufferedWriter buffer = new BufferedWriter(new FileWriter(path));
-      buffer.write(HEADERS + createPaymentPlanHeaders(loanOffer));
+      buffer.write(HEADERS);
       buffer.newLine();
       buffer.write(formattedPaymentPlan(loanOffer));
       buffer.close();
@@ -34,59 +34,50 @@ public class CsvPaymentPlanImpl implements Csv {
     }
   }
   
-  private String createPaymentPlanHeaders(LoanOffer loanOffer) {
+  private String formattedPaymentPlan(LoanOffer loanOffer) {
     
+    StringBuilder csvString = new StringBuilder();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Calendar cal = new GregorianCalendar();
+    Calendar calendar = new GregorianCalendar();
     String dateAsString = loanOffer.getStartDate(); 
     Date date; 
 
     try { 
         date = simpleDateFormat.parse(dateAsString);
-        cal.setTime(date);   
+        calendar.setTime(date);   
     } catch (ParseException e) { 
-    	logger.log("Date format error", "Error using: " + simpleDateFormat, ErrorTypes.ERROR);
+      logger.log("Date format error", "Error using: " + simpleDateFormat, ErrorTypes.ERROR);
     }
     
-    StringBuilder paymentPlanHeaders = new StringBuilder();
-    
-    for(int i=loanOffer.getPaymentInMonths(); i>0; i--) {
-      paymentPlanHeaders.append(cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH)+1) + ",");
-      cal.add(Calendar.MONTH, 1);
-    }
-    
-    return paymentPlanHeaders.toString();
-  }
-  
-  private String formattedPaymentPlan(LoanOffer loanOffer) {
-    
-    StringBuilder csvString = new StringBuilder();
-    
-    csvString.append(loanOffer.getLoanID());
-    csvString.append(DELIMITER);
-    csvString.append(loanOffer.getCar().getPrice());
-    csvString.append(DELIMITER);
-    csvString.append(String.valueOf(loanOffer.getLoanSize()));
-    csvString.append(DELIMITER);
-    csvString.append(String.valueOf(loanOffer.getTotalInterestRate()));
-    csvString.append(DELIMITER);
-    csvString.append(String.valueOf(loanOffer.getPaymentInMonths()));
-    csvString.append(DELIMITER);
-    csvString.append(loanOffer.getMontlyRepaymentPlusInterest());
-    csvString.append(DELIMITER);
-    csvString.append(loanOffer.getStartDate());
-    csvString.append(DELIMITER);
-    
-    double remaining = loanOffer.getLoanSize()*(1+(loanOffer.getTotalInterestRate()/100));
-//    double payment = loanOffer.getMontlyRepaymentPlusInterest();
-    double payment = 10500; //test, da jeg ikke kan genere loans lige nu
-    for(int i=loanOffer.getPaymentInMonths(); i>0; i--) {
-      csvString.append(remaining);
-      remaining -= payment;
+    int termin = 0;
+    loanOffer.setMontlyPayment(new LoanOfferGeneratorImpl().calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
+                            //dumt men det var loesningen lige nu. vi burde tilfoeje ydelse til loanOffer table i databasen?
+    double ydelse = loanOffer.getMontlyPayment();
+    double rente = 0;
+    double afdrag = 0;
+    double rest = loanOffer.getLoanSize();
+    double rentesats = loanOffer.getTotalInterestRate();
+     
+    for(int i=loanOffer.getPaymentInMonths(); i>=0; i--) {
+      csvString.append(termin);
       csvString.append(DELIMITER);
+      csvString.append(ydelse);
+      csvString.append(DELIMITER);
+      csvString.append(rente);
+      csvString.append(DELIMITER);
+      csvString.append(afdrag);
+      csvString.append(DELIMITER);
+      csvString.append(rest);
+      csvString.append(DELIMITER);
+      csvString.append(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1));
+      csvString.append(NEWLINE);
+      
+      rente = rest*(rentesats/100)/12;
+      afdrag = ydelse-rente;
+      rest -= afdrag;
+      termin++;
+      calendar.add(Calendar.MONTH, 1);
     }
-    
-    csvString.append(NEWLINE);
     
     return csvString.toString();
   }
