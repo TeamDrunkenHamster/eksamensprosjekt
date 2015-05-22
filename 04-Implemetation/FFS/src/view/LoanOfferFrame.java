@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import logging.ErrorTypes;
-import logging.LogContainer;
 import logging.Logger;
 import logic.Csv;
 import logic.CsvImpl;

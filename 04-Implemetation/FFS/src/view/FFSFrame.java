@@ -28,8 +28,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import logging.ErrorTypes;
 import logging.LogObject;
 import logging.Logger;
-import logic.DatabaseBuilder;
-import logic.DatabaseBuilderImpl;
 import logic.FFSObserver;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;

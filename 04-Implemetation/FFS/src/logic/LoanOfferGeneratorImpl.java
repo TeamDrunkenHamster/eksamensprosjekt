@@ -6,9 +6,6 @@ import java.sql.SQLException;
 import logging.ErrorTypes;
 import logging.Logger;
 
-import com.ferrari.finances.dk.bank.InterestRate;
-import com.ferrari.finances.dk.rki.CreditRator;
-
 import dataLayer.Connect;
 import dataLayer.ConnectImpl;
 import dataLayer.CustomerDAO;
@@ -31,7 +28,6 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 	private LoanOfferDAO loanOfferDAO;
 	private Connect connect;
 	private Connection connection;
-	private double bankRate;
 	private Logger logger = new Logger();
 
 	public LoanOfferGeneratorImpl() {
