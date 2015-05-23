@@ -7,12 +7,15 @@ import java.util.Collection;
 public class LogContainer {
 
 	private Collection<LogObject> log = new ArrayList<LogObject>();
-	private static LogContainer instance = null;
+	
+	private static class Holder {
+		// private class and no lazy initialization makes a singleton thread safe
+		static final LogContainer instance = new LogContainer();
+	};
 	
 	public static LogContainer instance() {
-		if (instance == null)
-			instance = new LogContainer();
-		return instance;
+		
+		return Holder.instance;
 	}
 	
 	private LogContainer() {
