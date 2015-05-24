@@ -45,14 +45,19 @@ public class CalculatorImpl implements Calculator {
 			totalInterestRate += 2.0;
 		else if (loanOffer.getCreditRating() == "C")
 			totalInterestRate += 3.0;
-		else
+		else {
 			rejectOffer();
+			return;
+		}
 		
 		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
 		  totalInterestRate += 1.0;
 		
-		if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice())
+		if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) {
 			rejectOffer();
+			return;
+		}
+			
 		
 		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
 		  totalInterestRate += 1.0;

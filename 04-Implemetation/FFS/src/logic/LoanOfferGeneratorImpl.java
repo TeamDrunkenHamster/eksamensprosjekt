@@ -93,7 +93,8 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		try {
 			if (!salesmanExists)
 				salesmanDAO.createSalesman(connection, salesman);
-			loanOfferDAO.createLoanOffer(connection, loanOffer);
+			if (!loanOffer.getRejected())
+				loanOfferDAO.createLoanOffer(connection, loanOffer);
 		} catch (SQLException e) {
 			logger.log("Database error", "Error while creating loan offer.\n" + e.getMessage(), ErrorTypes.ERROR);
 		}
