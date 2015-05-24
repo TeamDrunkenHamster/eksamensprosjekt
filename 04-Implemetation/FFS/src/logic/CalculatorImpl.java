@@ -42,8 +42,10 @@ public class CalculatorImpl implements Calculator {
 			totalInterestRate += 1.0;
 		else if (loanOffer.getCreditRating() == "B")
 			totalInterestRate += 2.0;
-		else
+		else if (loanOffer.getCreditRating() == "C")
 			totalInterestRate += 3.0;
+		else
+			loanOffer.setRejected(true);
 		
 		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
 		  totalInterestRate += 1.0;
@@ -66,7 +68,7 @@ public class CalculatorImpl implements Calculator {
 		double monthlyRate = interestRate / 12.0;
 		// The length of the term in months
 		// is the number of years times 12
-		//int termInMonths = termInYears * 12;
+		// int termInMonths = termInYears * 12;
 		// Calculate the monthly payment
 		// Typically this formula is provided so
 		// we won't go into the details
@@ -81,8 +83,7 @@ public class CalculatorImpl implements Calculator {
 
 			@Override
 			public void run() {
-
-				bankRate = InterestRate.i().todaysRate();
+					bankRate = InterestRate.i().todaysRate();
 			}
 		};
 		return bankRateThread;
@@ -93,8 +94,8 @@ public class CalculatorImpl implements Calculator {
 
 			@Override
 			public void run() {
-				String creditRating = CreditRator.i().rate(cpr).toString();
-				loanOffer.setCreditRating(creditRating);
+					String creditRating = CreditRator.i().rate(cpr).toString();
+					loanOffer.setCreditRating(creditRating);
 			}
 		};
 		return creditRateThread;
