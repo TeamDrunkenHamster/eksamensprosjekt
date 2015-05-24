@@ -38,7 +38,7 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 			Calculator calc = new CalculatorImpl();
 			createConnection();
 			LoanOffer loanOffer = loanOfferDAO.readLoanOffer(connection, loanOfferID);
-			loanOffer.setApr(calc.getApr(loanOffer));
+			loanOffer.setApr(calc.calculateApr(loanOffer));
 			return loanOffer;
 		} catch (SQLException e) {
 			logger.log("Database error", "Error retrieving loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
