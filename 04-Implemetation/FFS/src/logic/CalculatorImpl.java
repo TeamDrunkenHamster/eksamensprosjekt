@@ -4,6 +4,7 @@ import logging.ErrorTypes;
 import logging.Logger;
 
 import com.ferrari.finances.dk.bank.InterestRate;
+import com.ferrari.finances.dk.bank.developertools.InterestRateTestTool;
 import com.ferrari.finances.dk.rki.CreditRator;
 
 import domainLayer.LoanOffer;
@@ -45,18 +46,27 @@ public class CalculatorImpl implements Calculator {
 		else if (loanOffer.getCreditRating() == "C")
 			totalInterestRate += 3.0;
 		else
-			loanOffer.setRejected(true);
+			rejectOffer();
 		
 		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
 		  totalInterestRate += 1.0;
 		
-		if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice()) //Hvis udbetalen er mindre end 20% af bilens pris, afvis tilbud.
-		  loanOffer.setRejected(true);
+		if (loanOffer.getDownPayment() < 0.2*loanOffer.getCar().getPrice())
+			rejectOffer();
 		
 		if (loanOffer.getPaymentInMonths() > 36) //Hvis tilbagebetalingsperioden er mere end 3 aar.
 		  totalInterestRate += 1.0;
 
 		loanOffer.setTotalInterestRate(totalInterestRate);
+	}
+
+	private void rejectOffer() {
+		loanOffer.setRejected(true);
+		logger.log("Loan offer rejected.",
+				"Loan offer " + loanOffer.getLoanID()
+				+ " for " + loanOffer.getCustomer().getFirstName()
+				+ " " + loanOffer.getCustomer().getLastName() + 
+				" was rejected.", ErrorTypes.ERROR);
 	}
 	
 	private double calculateMonthlyPayment(double loanAmount, int termInMonths, double interestRate) {
@@ -83,7 +93,13 @@ public class CalculatorImpl implements Calculator {
 
 			@Override
 			public void run() {
-					bankRate = InterestRate.i().todaysRate();
+					// For testing
+					InterestRateTestTool test = new InterestRateTestTool();
+					InterestRate i = test.newInterestRateMock(10);
+					bankRate = i.i().todaysRate();
+					
+					// For production
+//					bankRate = InterestRate.i().todaysRate();
 			}
 		};
 		return bankRateThread;
