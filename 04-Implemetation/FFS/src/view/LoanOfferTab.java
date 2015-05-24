@@ -84,7 +84,7 @@ private void setTablePanel() {
 				LoanOffer clickedLoanOffer = new LoanOffer();
 				int row = target.getSelectedRow();
 				int clickedLoanID = (int) target.getValueAt(row, 0);
-				clickedLoanOffer = loanOR .readLoanOffer(clickedLoanID);
+				clickedLoanOffer = loanOfferModel.getLoanOffer(clickedLoanID);
 				new LoanOfferFrame(clickedLoanOffer);
 			}
 		}
