@@ -15,7 +15,7 @@ public class CalculatorImpl implements Calculator {
 	private Logger logger = new Logger();
 
 	@Override
-	public LoanOffer calculate(LoanOffer inputLoanOffer) {
+	public LoanOffer calculateLoanOffer(LoanOffer inputLoanOffer) {
 		
 		this.loanOffer = inputLoanOffer;
 		Thread bankRateThread = getInterestRate();
@@ -101,7 +101,7 @@ public class CalculatorImpl implements Calculator {
 	}
 
 	@Override
-	public double getApr(LoanOffer inputLoanOffer) {
+	public double calculateApr(LoanOffer inputLoanOffer) {
 
 		double sumOfPayments = (inputLoanOffer.getMonthlyPayment() * inputLoanOffer.getPaymentInMonths());
 		double oip = (sumOfPayments - inputLoanOffer.getLoanSize()) / inputLoanOffer.getLoanSize();

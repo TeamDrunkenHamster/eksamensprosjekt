@@ -4,7 +4,7 @@ import domainLayer.LoanOffer;
 
 public interface Calculator {
 
-	public LoanOffer calculate(LoanOffer loanOffer);
+	public LoanOffer calculateLoanOffer(LoanOffer loanOffer);
 	
-	public double getApr(LoanOffer loanOffer);
+	public double calculateApr(LoanOffer loanOffer);
 }
