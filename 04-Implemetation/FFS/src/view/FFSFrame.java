@@ -1,26 +1,11 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Collection;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -29,23 +14,19 @@ import logging.ErrorTypes;
 import logging.LogObject;
 import logging.Logger;
 import logic.FFSObserver;
-import logic.LoanOfferReader;
-import logic.LoanOfferReaderImpl;
 import logic.ObserverSingleton;
-import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
 public class FFSFrame extends JFrame implements FFSObserver{
 	
 	private JTabbedPane tabPane = new JTabbedPane();
-	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
-	private LoanOfferTable loanOfferModel = new LoanOfferTable();
 	private Logger logger = new Logger();
+	private LoanOfferTab loanOfferTab;
 	
 	public FFSFrame(){
 		setTheme();
 		setDefaultSettings();
-		initTabs();
+		addTabs();
 		ObserverSingleton.instance().addObserver(this);
 	}
 
@@ -73,118 +54,16 @@ public class FFSFrame extends JFrame implements FFSObserver{
 		setVisible(true);	
 	}
 
-	private void initTabs() {
-		addLoanOffersTab("Loan Offers");
-	}
-
-	private void addLoanOffersTab(String tabTitle) {
-		JPanel baseTabPanel = new JPanel(new GridBagLayout());
-		JPanel userInputPanel = new JPanel(new GridBagLayout());
-		JPanel tablePanel = new JPanel(new GridBagLayout());
-		JPanel buttonPanel = new JPanel(new GridBagLayout());
-		
-		GridBagConstraints gc = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
-		
-		
-		
-		gc.weightx = 0;
-		baseTabPanel.add(userInputPanel,gc);
-		gc.gridy = 1;
-		gc.anchor = GridBagConstraints.LAST_LINE_END;
-		baseTabPanel.add(buttonPanel,gc);
-		gc.anchor = GridBagConstraints.FIRST_LINE_START;
-		gc.gridy = 0;
-		gc.gridx = 1;
-		gc.weightx = 1;
-		gc.gridheight = 2;
-		gc.fill = GridBagConstraints.BOTH;
-		baseTabPanel.add(tablePanel,gc);
-		gc.gridheight = 1;
-		
-		//userinput panel
-		JLabel customerCPR = new JLabel("CPR");
-		JLabel loanOfferID = new JLabel("LoanID");
-		JLabel salesmanID = new JLabel("SalesmanID");
-		
-		final int textFieldLength = 20;
-		JTextField customerCPRTextField = new JTextField(textFieldLength);
-		JTextField loanOfferIDTextField = new JTextField(textFieldLength);
-		JTextField salesmanIDTextField = new JTextField(textFieldLength);
-		
-		userInputPanel.setBackground(new Color(0,50,200));
-		gc.gridx = 0;
-		gc.gridy = 0;
-		userInputPanel.add(customerCPR, gc);
-		gc.gridx += 1;
-		userInputPanel.add(customerCPRTextField, gc);
-		gc.gridx = 0;
-		gc.gridy += 1;
-		userInputPanel.add(loanOfferID, gc);
-		gc.gridx = 1;
-		userInputPanel.add(loanOfferIDTextField, gc);
-		gc.gridx = 0;
-		gc.gridy += 1;
-		userInputPanel.add(salesmanID, gc);
-		gc.gridx = 1;
-		userInputPanel.add(salesmanIDTextField,gc);
-		//tablePanel
-		gc.gridx = 1;
-		gc.gridy = 0;	
-		tablePanel.setBackground(new Color(200,50,0));
-		gc.gridy +=1;
-		JScrollPane scrollpaneTablePane = new JScrollPane();
-		JTable tableTablePane = new JTable();
-		
-		
-		tableTablePane.setModel(loanOfferModel);
-		scrollpaneTablePane.setViewportView(tableTablePane);
-		tableTablePane.setFillsViewportHeight(true);
-		tableTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableTablePane.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e){
-				if(e.getClickCount() == 2){
-					JTable target = (JTable)e.getSource();
-					LoanOffer clickedLoanOffer = new LoanOffer();
-					int row = target.getSelectedRow();
-					int clickedLoanID = (int) target.getValueAt(row, 0);
-					clickedLoanOffer = loanOR.readLoanOffer(clickedLoanID);
-					new LoanOfferFrame(clickedLoanOffer);
-				}
-			}
-		});
-
-		tablePanel.add(scrollpaneTablePane, gc);
-
-		//button panel
-		buttonPanel.setBackground(new Color(200,50,200));
-		JButton createButton = new JButton();
-		JButton searchButton = new JButton();
-		searchButton.setText("Search");
-		createButton.setText("Create");
-		createButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new LoanOfferFrame();
-
-			}
-		});
-		gc.insets = new Insets(5,0,5,5);
-		gc.gridx = 0;
-		gc.gridy = 0;
-		buttonPanel.add(searchButton, gc);
-		gc.gridx +=1;
-		
-		buttonPanel.add(createButton, gc);
-		
-		//add it all to the basePanel
-		tabPane.add(tabTitle, baseTabPanel);
+	private void addTabs() {
+		loanOfferTab = new LoanOfferTab();
+		tabPane.add("Loan Offers", loanOfferTab);
 		getContentPane().add(tabPane);
+
 	}
 
 	@Override
 	public void update() {
-		loanOfferModel.updateTable();
+		loanOfferTab.updateTab();
 		Collection<LogObject> log = logger.getLog();
 		if (!log.isEmpty()) {
 			for (LogObject entry : log) {

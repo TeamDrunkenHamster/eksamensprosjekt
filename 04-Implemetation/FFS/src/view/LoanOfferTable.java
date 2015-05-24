@@ -10,7 +10,7 @@ import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
 public class LoanOfferTable extends AbstractTableModel{	
-	private String[] columnNames = { "Loan ID", "Salesman ID", "Status", "Loan size","First name", "Last name"};
+	private String[] columnNames = { "Loan ID", "Salesman ID", "Rejected Status", "Loan size","First name", "Last name"};
 	
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private List <LoanOffer> loanOfferList;
@@ -64,5 +64,10 @@ public class LoanOfferTable extends AbstractTableModel{
 	public void updateTable(){
 		loanOfferList = loanOR.readAllLoanOffers();
 		fireTableDataChanged();
+	}
+
+	public LoanOffer getLoanOffer(int clickedLoanID) {
+		
+		return loanOfferList.get(clickedLoanID-1);
 	}
 }
