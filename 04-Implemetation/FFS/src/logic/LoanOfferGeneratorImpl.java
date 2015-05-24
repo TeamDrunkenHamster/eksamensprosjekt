@@ -83,7 +83,7 @@ public class LoanOfferGeneratorImpl implements LoanOfferGenerator {
 		}
 
 		Calculator calc = new CalculatorImpl();
-		loanOffer = calc.calculate(loanOffer);
+		loanOffer = calc.calculateLoanOffer(loanOffer);
 		
 		
 		if (loanOffer.getLoanSize() < salesman.getLoanValueLimit())
