@@ -17,8 +17,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
-import logic.LoanOfferReader;
-import logic.LoanOfferReaderImpl;
 import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
@@ -29,7 +27,6 @@ public class LoanOfferTab extends JPanel {
 	private JPanel buttonPanel = new JPanel(new GridBagLayout());
 	private GridBagConstraints gcLoanOfferTab = new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE, new Insets(0,0,0,0), 0, 0);
 	private LoanOfferTable loanOfferModel = new LoanOfferTable();
-	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	
 LoanOfferTab(){
 	setLayout(new GridBagLayout());
