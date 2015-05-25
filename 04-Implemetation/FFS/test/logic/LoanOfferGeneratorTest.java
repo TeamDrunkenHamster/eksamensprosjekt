@@ -21,72 +21,176 @@ public class LoanOfferGeneratorTest {
 	public void periodeOver3Years(){
 		
 		car.setPrice(100_000);
-		
+		customer.setCPR("0000000000"); //creditRate A
 		LoanOffer loanToBeCalulated = new LoanOffer();
-		
 		loanToBeCalulated.setDownPayment(20_000);
 		loanToBeCalulated.setCustomer(customer);
 		loanToBeCalulated.setCar(car);
-		loanToBeCalulated.setCreditRating("A");
 		loanToBeCalulated.setPaymentInMonths(40);		
 		
-		LoanOffer loanOfferExpected = new LoanOffer();
+		LoanOffer expectedLoanOffer = new LoanOffer();
 		
-		loanOfferExpected.setDownPayment(loanToBeCalulated.getDownPayment());
-		loanOfferExpected.setCustomer(customer);
-		loanOfferExpected.setCar(car);
-		loanOfferExpected.setCreditRating("A");
-		loanOfferExpected.setPaymentInMonths(40);
-		loanOfferExpected.setApr(5.97);
-		loanOfferExpected.setMonthlyPayment(2398.08);
-		loanOfferExpected.setTotalInterestRate(11);
-		LoanOffer actual = calc.calculate(loanToBeCalulated);
+		expectedLoanOffer = setExpectedLoanOffer(5.97, 2398.08, 11);
 		
-		//skal kunne sætte bankraten til 8, ellers kan vi ikke lave tests
-		//skal måske også et lånet op i 3 tests, apr, total interest rate og monthlypayment
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
 		
-		assertEquals(loanOfferExpected.getTotalInterestRate(), actual.getTotalInterestRate(),1);
-		assertEquals(loanOfferExpected.getMonthlyPayment(), actual.getMonthlyPayment(),1);
-		assertEquals(loanOfferExpected.getApr(), actual.getApr(),1); 
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(), 0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
 	}
 	
-//	@Test
-//	public void periodeOf3Years(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void periodeOf20Months(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void downPaymentIsUnder20Percent(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void downPaymentIs50Percent(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void downPaymentIsAbove50Percent(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void creditRatingB(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void creditRatingC(){
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	public void creditRatingD(){
-//		assertEquals(expected, actual);
-//	}
+	@Test
+	public void periodeOf3Years(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000000"); //creditRate A 
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(20_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(36);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(5.39, 2581.37, 10);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void periodeOf20Months(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000000"); //creditRate A 
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(30_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(5.39, 3814.29, 10);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void downPaymentIsUnder20Percent(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000000"); //creditRate A 
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(10);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer.setRejected(true);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getRejected(), actualLoanOffer.getRejected());
+	}
+	
+	@Test
+	public void downPaymentIs50Percent(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000000"); //creditRate A 
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(50_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(4.84, 2701.53, 9);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void downPaymentIsAbove50Percent(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000000"); //creditRate A 
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(60_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(4.84, 2161.23, 9);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void creditRatingB(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000001"); //creditRate B
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(60_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(5.39, 2179.6, 10);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(), 0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void creditRatingC(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000002"); //creditRate C
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(60_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer = setExpectedLoanOffer(5.94, 2198.06, 11);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		
+		assertEquals(expectedLoanOffer.getTotalInterestRate(), actualLoanOffer.getTotalInterestRate(),0.01);
+		assertEquals(expectedLoanOffer.getMonthlyPayment(), actualLoanOffer.getMonthlyPayment(),0.01);
+		assertEquals(expectedLoanOffer.getApr(), actualLoanOffer.getApr(),0.01);
+	}
+	
+	@Test
+	public void creditRatingD(){
+		car.setPrice(100_000);
+		customer.setCPR("0000000003"); //creditRate D
+		LoanOffer loanToBeCalulated = new LoanOffer();
+		loanToBeCalulated.setDownPayment(60_000);
+		loanToBeCalulated.setCustomer(customer);
+		loanToBeCalulated.setCar(car);
+		loanToBeCalulated.setPaymentInMonths(20);		
+		LoanOffer expectedLoanOffer = new LoanOffer();
+		
+		expectedLoanOffer.setRejected(true);
+		LoanOffer actualLoanOffer = calc.calculateLoanOffer(loanToBeCalulated);
+		assertEquals(expectedLoanOffer.getRejected(), actualLoanOffer.getRejected());
+	}
+	
+	private LoanOffer setExpectedLoanOffer(double apr, double monthlyPay,double totalInterestRate) {
+		LoanOffer expected = new LoanOffer();
+		expected.setApr(apr);
+		expected.setMonthlyPayment(monthlyPay);
+		expected.setTotalInterestRate(totalInterestRate);
+		return expected;
+	}
 }
