@@ -10,7 +10,7 @@ import domainLayer.Customer;
 import domainLayer.LoanOffer;
 
 
-public class LoanOfferGeneratorTest {
+public class CalculatorImplTest {
 	
 	private Calculator calc = new CalculatorImpl();
 	private Customer customer = new Customer();
