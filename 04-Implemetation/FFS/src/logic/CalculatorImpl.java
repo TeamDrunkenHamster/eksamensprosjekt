@@ -33,6 +33,7 @@ public class CalculatorImpl implements Calculator {
 		calculateTotalInterestRate();
 		loanOffer.setLoanSize(loanOffer.getCar().getPrice()-loanOffer.getDownPayment());
 		loanOffer.setMonthlyPayment(calculateMonthlyPayment(loanOffer.getLoanSize(), loanOffer.getPaymentInMonths(), loanOffer.getTotalInterestRate()));
+		loanOffer.setApr(calculateApr(inputLoanOffer));
 		return loanOffer;
 	}
 	
@@ -46,10 +47,10 @@ public class CalculatorImpl implements Calculator {
 		else if (loanOffer.getCreditRating() == "C")
 			totalInterestRate += 3.0;
 		else {
+			System.out.println("D is rejected?");
 			rejectOffer();
 			return;
 		}
-		
 		if (loanOffer.getDownPayment() < 0.5*loanOffer.getCar().getPrice()) //Hvis udbetalingen er mindre 50% af bilens pris, haeves total rentesats med 1%.
 		  totalInterestRate += 1.0;
 		
@@ -99,10 +100,8 @@ public class CalculatorImpl implements Calculator {
 			@Override
 			public void run() {
 					// For testing
-					InterestRateTestTool test = new InterestRateTestTool();
-					InterestRate i = test.newInterestRateMock(10);
-					bankRate = i.i().todaysRate();
-					
+					InterestRate i = InterestRateTestTool.newInterestRateMock(8);
+					bankRate = i.todaysRate();
 					// For production
 //					bankRate = InterestRate.i().todaysRate();
 			}
@@ -128,6 +127,6 @@ public class CalculatorImpl implements Calculator {
 		double sumOfPayments = (inputLoanOffer.getMonthlyPayment() * inputLoanOffer.getPaymentInMonths());
 		double oip = (sumOfPayments - inputLoanOffer.getLoanSize()) / inputLoanOffer.getLoanSize();
 		double apr = oip / inputLoanOffer.getPaymentInMonths() * 12;
-		return apr;
+		return apr*100; 
 	}
 }
