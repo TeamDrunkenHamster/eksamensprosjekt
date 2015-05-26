@@ -47,7 +47,6 @@ public class CalculatorImpl implements Calculator {
 		else if (loanOffer.getCreditRating() == "C")
 			totalInterestRate += 3.0;
 		else {
-			System.out.println("D is rejected?");
 			rejectOffer();
 			return;
 		}
