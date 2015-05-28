@@ -4,7 +4,6 @@ import logging.ErrorTypes;
 import logging.Logger;
 
 import com.ferrari.finances.dk.bank.InterestRate;
-import com.ferrari.finances.dk.bank.developertools.InterestRateTestTool;
 import com.ferrari.finances.dk.rki.CreditRator;
 
 import domainLayer.LoanOffer;
@@ -98,11 +97,8 @@ public class CalculatorImpl implements Calculator {
 
 			@Override
 			public void run() {
-					// For testing
-					InterestRate i = InterestRateTestTool.newInterestRateMock(8);
-					bankRate = i.todaysRate();
-					// For production
-//					bankRate = InterestRate.i().todaysRate();
+					
+					bankRate = InterestRate.i().todaysRate();
 			}
 		};
 		return bankRateThread;
