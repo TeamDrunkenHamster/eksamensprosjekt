@@ -12,7 +12,7 @@ import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
 public class LoanOfferTable extends AbstractTableModel{	
-	private String[] columnNames = { "Loan ID", "Salesman ID", "Rejected Status", "Loan size","First name", "Last name"};
+	private String[] columnNames = { "Loan ID", "Salesman ID", "Approved Status", "Loan size","First name", "Last name"};
 	
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private List <LoanOffer> loanOfferList;
@@ -47,7 +47,7 @@ public class LoanOfferTable extends AbstractTableModel{
 			return loanOfferList.get(rowIndex).getSalesman().getId();
 		
 		case 2:			
-			return loanOfferList.get(rowIndex).getRejected();
+			return loanOfferList.get(rowIndex).getApprovedStatus();
 		
 		case 3:
 			return loanOfferList.get(rowIndex).getLoanSize();
