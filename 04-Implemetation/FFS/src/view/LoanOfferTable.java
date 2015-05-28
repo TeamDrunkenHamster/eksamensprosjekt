@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import logic.Calculator;
+import logic.CalculatorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
 import domainLayer.LoanOffer;
@@ -68,6 +70,9 @@ public class LoanOfferTable extends AbstractTableModel{
 
 	public LoanOffer getLoanOffer(int clickedLoanID) {
 		
-		return loanOfferList.get(clickedLoanID-1);
+		Calculator calc = new CalculatorImpl();
+		LoanOffer clicked = loanOfferList.get(clickedLoanID-1);
+		clicked.setApr(calc.calculateApr(clicked));
+		return clicked;
 	}
 }

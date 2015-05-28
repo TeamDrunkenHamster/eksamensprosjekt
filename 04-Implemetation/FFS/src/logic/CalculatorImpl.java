@@ -97,11 +97,8 @@ public class CalculatorImpl implements Calculator {
 
 			@Override
 			public void run() {
-					// For testing
-					InterestRate i = InterestRateTestTool.newInterestRateMock(8);
-					bankRate = i.todaysRate();
-					// For production
-//					bankRate = InterestRate.i().todaysRate();
+					
+					bankRate = InterestRate.i().todaysRate();
 			}
 		};
 		return bankRateThread;
