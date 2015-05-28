@@ -4,7 +4,6 @@ import logging.ErrorTypes;
 import logging.Logger;
 
 import com.ferrari.finances.dk.bank.InterestRate;
-import com.ferrari.finances.dk.bank.developertools.InterestRateTestTool;
 import com.ferrari.finances.dk.rki.CreditRator;
 
 import domainLayer.LoanOffer;
