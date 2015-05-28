@@ -4,15 +4,13 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import logic.Calculator;
-import logic.CalculatorImpl;
 import logic.LoanOfferReader;
 import logic.LoanOfferReaderImpl;
 import domainLayer.LoanOffer;
 
 @SuppressWarnings("serial")
 public class LoanOfferTable extends AbstractTableModel{	
-	private String[] columnNames = { "Loan ID", "Salesman ID", "Approved Status", "Loan size","First name", "Last name"};
+	private String[] columnNames = { "Loan ID", "Salesman ID", "Rejected Status", "Loan size","First name", "Last name"};
 	
 	private LoanOfferReader loanOR = new LoanOfferReaderImpl();
 	private List <LoanOffer> loanOfferList;
@@ -47,7 +45,7 @@ public class LoanOfferTable extends AbstractTableModel{
 			return loanOfferList.get(rowIndex).getSalesman().getId();
 		
 		case 2:			
-			return loanOfferList.get(rowIndex).getApprovedStatus();
+			return loanOfferList.get(rowIndex).getRejected();
 		
 		case 3:
 			return loanOfferList.get(rowIndex).getLoanSize();
@@ -70,9 +68,6 @@ public class LoanOfferTable extends AbstractTableModel{
 
 	public LoanOffer getLoanOffer(int clickedLoanID) {
 		
-		Calculator calc = new CalculatorImpl();
-		LoanOffer clicked = loanOfferList.get(clickedLoanID-1);
-		clicked.setApr(calc.calculateApr(clicked));
-		return clicked;
+		return loanOfferList.get(clickedLoanID-1);
 	}
 }

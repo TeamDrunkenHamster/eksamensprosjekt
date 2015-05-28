@@ -33,13 +33,12 @@ public class LoanOfferReaderImpl implements LoanOfferReader {
 	
 	@Override
 	public LoanOffer readLoanOffer(int loanOfferID) {
-
+		// TODO Auto-generated method stub
 		try {
 			Calculator calc = new CalculatorImpl();
 			createConnection();
 			LoanOffer loanOffer = loanOfferDAO.readLoanOffer(connection, loanOfferID);
 			loanOffer.setApr(calc.calculateApr(loanOffer));
-			System.out.println(loanOffer.getApr());
 			return loanOffer;
 		} catch (SQLException e) {
 			logger.log("Database error", "Error retrieving loan offers.\n" + e.getMessage(), ErrorTypes.ERROR);
